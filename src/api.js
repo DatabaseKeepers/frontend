@@ -1,5 +1,7 @@
+const MODE = import.meta.env.VITE_VERCEL_ENV ?? import.meta.env.MODE;
+
 const API_URL =
-  import.meta.env.MODE === "production"
+  MODE === "production"
     ? "https://radiologyarchive.com"
     : "https://dev-api.radiologyarchive.com";
 
