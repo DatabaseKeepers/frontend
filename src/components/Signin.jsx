@@ -1,22 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPasswordLocally } from "../api.js";
 
 function Signin() {
-  const [input, setInput] = useState({ email: "", password: "" });
-  const [error, setError] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
-    let email = input.email.toLowerCase().trim();
-    let password = input.password;
+  const onSubmit = (data) => {
+    const email = data.email.toLowerCase().trim();
+    const password = data.password;
 
     signInWithEmailAndPasswordLocally(email, password)
       .then((data) => {
         if (data.errors) {
-          alert(data.errors[0].msg);
+          setError("root.serverError", { message: data.errors[0].msg });
         } else {
           navigate("/dashboard");
         }
@@ -24,32 +32,29 @@ function Signin() {
       .catch((err) => console.log(err));
   };
 
-  const handleChange = (e) => {
-    setInput((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+  const loginButtonStyle = {
+    backgroundColor: "#0D6EFD",
+    borderRadius: "3px",
+    width: "190px",
+    border: "none",
+    color: "white",
+    height: "35px",
+    marginBottom: "75px",
+    marginTop: "25px",
   };
 
-  const loginButtonStyle={
-    backgroundColor: '#0D6EFD',
-    borderRadius: '3px',
-    width:'190px',
-    border: 'none',
-    color: 'white',
-    height: '35px',
-    marginBottom: '75px',
-    marginTop: '25px'
-  };
-
-  const boldSpan={
-    color: 'black',
-    fontWeight: '600'
+  const boldSpan = {
+    color: "black",
+    fontWeight: "600",
   };
 
   return (
     <div>
-      <form autoComplete="off" className="form" onSubmit={handleSubmit}>
+      <form
+        autoComplete="off"
+        className="form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="form-row">
           <div className="form-label">
             <label htmlFor="email">
@@ -57,13 +62,13 @@ function Signin() {
             </label>
           </div>
           <input
+            {...register("email", { required: "Email address is required" })}
+            id="email"
             name="email"
             type="text"
-            onChange={handleChange}
-            value={input.email}
-            required
             autoComplete="true"
           />
+          {errors.email && <p>{errors.email.message}</p>}
         </div>
         <div className="form-row">
           <div className="form-label">
@@ -72,18 +77,24 @@ function Signin() {
             </label>
           </div>
           <input
+            {...register("password", { required: true })}
+            id="password"
             name="password"
-            onChange={handleChange}
-            value={input.password}
             type="password"
             required
             autoComplete="true"
           />
+          {errors.password && <p>{errors.password.message}</p>}
         </div>
         <div className="form-row">
           <div>
-            {error ? <p>{error}</p> : null}
-            <button style={loginButtonStyle} title="Signin" aria-label="Signin" type="submit">
+            {errors.root ? <p>{errors.root.serverError.message}</p> : null}
+            <button
+              style={loginButtonStyle}
+              title="Signin"
+              aria-label="Signin"
+              type="submit"
+            >
               Log In
             </button>
           </div>

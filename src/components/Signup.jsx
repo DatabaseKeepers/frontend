@@ -1,37 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signUpWithEmailAndPasswordLocally } from "../api.js";
 
 function Signup() {
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-    "bday-year": "",
-    "bday-month": "",
-    "bday-day": "",
-    first_name: "",
-    last_name: "",
-    title: "",
-    role: "PATIENT",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      "bday-year": "",
+      "bday-month": "",
+      "bday-day": "",
+      first_name: "",
+      last_name: "",
+      title: "",
+      role: "PATIENT",
+    },
   });
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
-    const email = input.email.toLowerCase().trim();
-    const password = input.password;
-    const dob = `${input["bday-year"]}-${input["bday-month"]}-${input[
-      "bday-day"
-    ]
+  const onSubmit = (data) => {
+    const email = data.email.toLowerCase().trim();
+    const password = data.password;
+    const dob = `${data["bday-year"]}-${data["bday-month"]}-${data["bday-day"]
       .toString()
       .padStart(2, 0)}`;
-    const first_name = input.first_name;
-    const last_name = input.last_name;
-    const title = input.title;
-    const role = input.role;
-    console.log(input);
+    const first_name = data.first_name;
+    const last_name = data.last_name;
+    const title = data.title;
+    const role = data.role;
 
     signUpWithEmailAndPasswordLocally(
       email,
@@ -44,7 +46,7 @@ function Signup() {
     )
       .then((data) => {
         if (data.errors) {
-          setError(data.errors[0].msg);
+          setError("root.serverError", { message: data.errors[0].msg });
         } else {
           navigate("/dashboard");
         }
@@ -52,44 +54,42 @@ function Signup() {
       .catch((err) => console.log(err));
   };
 
-  const handleChange = (e) => {
-    setInput((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+  const errorText = {
+    color: "red",
   };
 
   return (
     <div>
-      <form autoComplete="off" className="form" onSubmit={handleSubmit}>
+      <form
+        autoComplete="off"
+        className="form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h1>Sign Up</h1>
         <div className="form-row">
           <input
             name="first_name"
             type="text"
-            onChange={handleChange}
-            value={input.first_name}
-            required
+            {...register("first_name", { required: "First name is required" })}
             autoComplete="true"
             placeholder="First Name"
           />
           <input
             name="last_name"
             type="text"
-            onChange={handleChange}
-            value={input.last_name}
-            required
+            {...register("last_name", { required: "Last name is required" })}
             autoComplete="true"
             placeholder="Last Name"
           />
+          {errors.first_name && (
+            <p style={errorText}>{errors.first_name.message}</p>
+          )}
+          {errors.last_name && (
+            <p style={errorText}>{errors.last_name.message}</p>
+          )}
         </div>
         <div className="form-row">
-          <select
-            className="form-select"
-            name="title"
-            onChange={handleChange}
-            value={input["title"]}
-          >
+          <select className="form-select" name="title" {...register("title")}>
             <option default hidden value="">
               Title
             </option>
@@ -98,12 +98,7 @@ function Signup() {
             <option value="Ms.">Ms.</option>
             <option value="Dr.">Dr.</option>
           </select>
-          <select
-            className="form-select"
-            name="title"
-            onChange={handleChange}
-            value={input["role"]}
-          >
+          <select className="form-select" name="role" {...register("role")}>
             <option value="PATIENT">Patient</option>
             <option value="PHYSICIAN">Physician</option>
             <option value="RADIOLOGIST">Radiologist</option>
@@ -117,9 +112,7 @@ function Signup() {
                 autoComplete="bday-month"
                 className="form-select"
                 name="bday-month"
-                required
-                onChange={handleChange}
-                value={input["bday-month"]}
+                {...register("bday-month", { required: "Month is required" })}
               >
                 <option default disabled hidden value="">
                   Month
@@ -140,17 +133,30 @@ function Signup() {
               <input
                 autoComplete="bday-day"
                 name="bday-day"
-                onChange={handleChange}
                 placeholder="Day"
                 type="number"
+                {...register("bday-day", { required: "Day is required" })}
               />
               <input
                 autoComplete="bday-year"
                 name="bday-year"
-                onChange={handleChange}
+                {...register("bday-year", {
+                  required: "Year is required",
+                  minLength: 4,
+                  maxLength: 4,
+                })}
                 placeholder="Year"
                 type="string"
               />
+              {errors["bday-month"] && (
+                <p style={errorText}>{errors["bday-month"].message}</p>
+              )}
+              {errors["bday-day"] && (
+                <p style={errorText}>{errors["bday-day"].message}</p>
+              )}
+              {errors["bday-year"] && (
+                <p style={errorText}>{errors["bday-year"].message}</p>
+              )}
             </label>
           </div>
         </div>
@@ -164,11 +170,17 @@ function Signup() {
             id="email"
             name="email"
             type="text"
-            onChange={handleChange}
-            value={input.email}
-            required
+            {...register("email", {
+              required: true,
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Email address must be valid",
+              },
+            })}
             autoComplete="true"
+            aria-invalid={errors.email ? "true" : "false"}
           />
+          {errors.email && <p style={errorText}>{errors.email.message}</p>}
         </div>
         <div className="form-row">
           <div className="form-label">
@@ -180,15 +192,24 @@ function Signup() {
             id="password"
             name="password"
             type="password"
-            onChange={handleChange}
-            value={input.password}
-            required
-            autoComplete="true"
+            {...register("password", {
+              required: true,
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters long",
+              },
+            })}
+            aria-invalid={errors.password ? "true" : "false"}
           />
+          {errors.password && (
+            <p style={errorText}>{errors.password.message}</p>
+          )}
         </div>
         <div className="form-row">
           <div className="btn">
-            {error ? <p style={{ color: "red" }}>{error}</p> : null}
+            {errors.root ? (
+              <p style={errorText}>{errors.root.serverError.message}</p>
+            ) : null}
             <button title="Signup" aria-label="Signup" type="submit">
               Sign Up
             </button>
