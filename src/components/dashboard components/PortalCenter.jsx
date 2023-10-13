@@ -36,7 +36,7 @@ export default function PortalCenter() {
                 btnText: "Get Second Opinion",
                 btnLink: "/secondopinion"
             },
-        ], 
+        ],
         radiologist: [
             {
                 title: "Add More to Your Profile!",
@@ -54,8 +54,8 @@ export default function PortalCenter() {
     }
 
     return(
-    data.patient.map((item)=>{
-        return <DashboardSection isLast={item===data.patient[data.patient.length-1]} headerDescription={item.title} paragraphDescription={item.description} buttonDescription={item.btnText} buttonLink={item.btnLink}/>
+    data.patient.map((item, index)=>{
+        return <DashboardSection key={index} isLast={item===data.patient[data.patient.length-1]} headerDescription={item.title} paragraphDescription={item.description} buttonDescription={item.btnText} buttonLink={item.btnLink}/>
 
     }))
 
