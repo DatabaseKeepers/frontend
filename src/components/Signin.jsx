@@ -41,6 +41,7 @@ function Signin() {
     height: "35px",
     marginBottom: "75px",
     marginTop: "25px",
+    alignSelf: "center",
   };
 
   const boldSpan = {
@@ -87,17 +88,15 @@ function Signin() {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <div className="form-row">
-          <div>
-            {errors.root ? <p>{errors.root.serverError.message}</p> : null}
-            <button
-              style={loginButtonStyle}
-              title="Signin"
-              aria-label="Signin"
-              type="submit"
-            >
-              Log In
-            </button>
-          </div>
+          {errors.root ? <p>{errors.root.serverError.message}</p> : null}
+          <button
+            style={loginButtonStyle}
+            title="Signin"
+            aria-label="Signin"
+            type="submit"
+          >
+            Log In
+          </button>
         </div>
       </form>
     </div>
