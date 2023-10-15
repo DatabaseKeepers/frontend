@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import RadioArchiveLogo from "../assets/RadioArchiveLogo.png";
 import Signin from "./Signin";
-import "./SigninForm.css";
+import "./Form.css";
 
 function SigninForm() {
   const { state } = useLocation();
