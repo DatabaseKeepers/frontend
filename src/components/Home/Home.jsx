@@ -1,26 +1,16 @@
-import { onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState } from "react";
-import { firebaseAuth } from "../../auth.js";
-import HomeNavBar from "../navbars/HomeNavBar.jsx";
-import docvisit from '../../assets/docvisit.png'
-import doctor1 from '../../assets/doctor1.png'
-import doctor2 from '../../assets/doctor2.png'
-import doctor3 from'../../assets/doctor3.png'
-import doctor4 from'../../assets/doctor4.png'
-import doctor5 from'../../assets/doctor5.png'
-import doctor6 from'../../assets/doctor6.png'
+import React from "react";
+import doctor1 from '../../assets/doctor1.png';
+import doctor2 from '../../assets/doctor2.png';
+import doctor3 from '../../assets/doctor3.png';
+import doctor4 from '../../assets/doctor4.png';
+import doctor5 from '../../assets/doctor5.png';
+import doctor6 from '../../assets/doctor6.png';
+import docvisit from '../../assets/docvisit.png';
 import WebFooter from "../WebFooter.jsx";
+import HomeNavBar from "../navbars/HomeNavBar.jsx";
 
 import './Home.css';
 function Home() {
-  const [user, setUser] = useState();
-
-  onAuthStateChanged(firebaseAuth, (user) => {
-    if (user) setUser(user);
-  });
-
-  useEffect(() => {}, [user]);
-
   return (
     <div>
       <HomeNavBar/>
@@ -42,7 +32,7 @@ function Home() {
               <img src={doctor1}  className="doctorimage"/>
               <div className="doctordetails">
               <span className ="doctornames">Dr. Allison Mitchel</span>
-              <span>Specialization: Diagnostic Radiology</span> 
+              <span>Specialization: Diagnostic Radiology</span>
               </div>
             </li>
             <li className="doctorcontainer">
@@ -85,13 +75,9 @@ function Home() {
           </ul>
         </div>
       </div>
-      <div className="card">
-        {user && <p>Welcome, {user.email}</p>}
-        <a href="/signin">Go to signin screen</a>
-      </div>
       <WebFooter />
     </div>
-  );  
+  );
 }
 
 export default Home;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 function DashboardSection({isLast, headerDescription, paragraphDescription, buttonDescription, buttonLink}){
-    
+
     const headerStyle = {
         color: '#0D6EFD',
 
@@ -13,13 +13,13 @@ function DashboardSection({isLast, headerDescription, paragraphDescription, butt
     const buttonStyle = {
         width: '250px',
         height: '50px',
-        backgroundColor: 'green',
+        backgroundColor: "#479f76",
         color: 'white',
         borderRadius: '5px',
         fontSize:'20px'
     }
     const divStyle = {
-        marginLeft: '80px', 
+        marginLeft: '80px',
         marginTop:'50px',
         marginBottom: '75px'
     }

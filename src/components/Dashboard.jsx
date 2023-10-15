@@ -1,25 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import PortalNavBar from "./navbars/PortalNavBar.jsx";
-import './navbars/PortalNavBar.css';
+import "./navbars/PortalNavBar.css";
 import PortalCenter from "./dashboard components/PortalCenter.jsx";
-import WebFooter from "./WebFooter.jsx"
+import WebFooter from "./WebFooter.jsx";
 import GreetingCard from "./dashboard components/GreetingCard.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import { useEffect } from "react";
+
 function Dashboard() {
   const navigate = useNavigate();
+  const { role, user } = useAuth();
 
-  const PortalCenterDiv ={
-    display: 'flex',
-    flexDirection: 'column',
-  }
+  useEffect(() => {
+    if (!user) navigate("/");
+  }, [user, navigate]);
+
+  const PortalCenterDiv = {
+    display: "flex",
+    flexDirection: "column",
+  };
+
   return (
-    //title names and title colors are fillers we could determine what the title color is based off of the context
     <div>
-      <PortalNavBar title={"title name"} titleColor={'#479F76'}/>
-      <GreetingCard title={"patient"} name= {"john"} lastName={"Doe"}/>
+      <PortalNavBar title={role} />
+      <GreetingCard role={role} name={user.displayName || user.email} />
       <div style={PortalCenterDiv}>
-      <PortalCenter/>
+        <PortalCenter />
       </div>
-      <WebFooter/>
+      <WebFooter />
     </div>
   );
 }

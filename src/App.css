@@ -13,3 +13,7 @@
 .form-label {
   text-align: left;
 }
+
+.form-row h1 {
+  white-space: nowrap;
+}

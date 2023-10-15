@@ -25,6 +25,7 @@ function Signup() {
     },
   });
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const onSubmit = (data) => {
     const email = data.email.toLowerCase().trim();
@@ -37,15 +38,7 @@ function Signup() {
     const title = data.title;
     const role = data.role;
 
-    signUpWithEmailAndPasswordLocally(
-      email,
-      password,
-      dob,
-      first_name,
-      last_name,
-      title,
-      role
-    )
+    signup(email, password, dob, first_name, last_name, title, role)
       .then((data) => {
         if (data.errors) {
           setError("root.serverError", { message: data.errors[0].msg });

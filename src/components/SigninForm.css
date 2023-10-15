@@ -1,0 +1,58 @@
+@media (max-width: 768px) {
+  .signinContainer {
+    width: 60% !important;
+  }
+  .form-row h1 {
+    font-size: calc(1.5rem + 1vw)
+  }
+}
+
+.signinWrapper {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #5314ba;
+}
+
+.signinContainer {
+  background: white;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  overflow: hidden;
+}
+
+.option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form-row img {
+  padding-bottom: 10px;
+}
+
+.userType {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 100px;
+}
+
+.option button {
+  border: none;
+  background-color: #5314ba;
+  color: white;
+  width: 125px;
+  height: auto;
+  border-radius: 3px;
+}
+.option a {
+  margin-bottom: 10px;
+}
