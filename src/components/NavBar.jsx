@@ -1,6 +1,7 @@
 import React from "react";
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, NavbarText } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
+import Spinner from "react-bootstrap/Spinner";
 import { useLocation, useNavigate } from "react-router-dom";
 import RadioArchiveLogo from "../assets/RadioArchiveLogo.png";
 import person from "../assets/person.png";
@@ -26,8 +27,6 @@ const NavBar = () => {
         return "#0D6EFD";
       case "Radiologist":
         return "#DC3545";
-      default:
-        return "#479f76";
     }
   };
 
@@ -100,7 +99,12 @@ const NavBar = () => {
   const LoggedInDropdown = () => {
     return (
       <>
-        {showTitle && (
+        {showTitle && !role && (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        )}
+        {showTitle && role && (
           <Nav className="mr-auto">
             <h2>
               <span style={titleStyle}>{role}</span> Portal
@@ -116,7 +120,8 @@ const NavBar = () => {
             <Dropdown.ItemText style={boldName}>
               {user.displayName || user.email}
             </Dropdown.ItemText>
-            <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
+            <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
+            <Dropdown.Item href="/profile">Profile</Dropdown.Item>
             <Dropdown.Item href="TODO" disabled={true}>
               Notifications
             </Dropdown.Item>
@@ -129,17 +134,18 @@ const NavBar = () => {
 
   return (
     <Navbar className="navbar">
-      <Navbar.Brand>
-        <a href="/" className="navbar-logo">
-          <img src={RadioArchiveLogo} />
-          <span className="titleSpans" id="radiology">
-            Radiology
-          </span>
-          <span className="titleSpans" id="archive">
-            {" "}
-            Archive
-          </span>
-        </a>
+      <Navbar.Brand
+        href="/"
+        style={{ fontSize: "2.25rem", marginLeft: "30px" }}
+      >
+        <img
+          src={RadioArchiveLogo}
+          width="auto"
+          height="30"
+          className="d-inline-block"
+        />
+        <NavbarText id="radiology">Radiology</NavbarText>
+        <NavbarText id="archive">Archive</NavbarText>
       </Navbar.Brand>
       {user ? <LoggedInDropdown /> : <LoggedOutDropdown />}
     </Navbar>

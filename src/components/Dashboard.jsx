@@ -7,7 +7,7 @@ import PortalCenter from "./dashboard components/PortalCenter.jsx";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { role, user } = useAuth();
 
   useEffect(() => {
     if (!user) navigate("/");
@@ -22,7 +22,7 @@ function Dashboard() {
     <div>
       <GreetingCard name={user?.displayName || user?.email} />
       <div style={PortalCenterDiv}>
-        <PortalCenter />
+        <PortalCenter role={role} />
       </div>
       <WebFooter />
     </div>

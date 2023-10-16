@@ -1,7 +1,19 @@
 import React from 'react';
 
-function DashboardSection({isLast, headerDescription, paragraphDescription, buttonDescription, buttonLink}){
+function DashboardSection({role, isLast, headerDescription, paragraphDescription, buttonDescription, buttonLink}){
 
+  const roleColor = (role) => {
+    switch (role) {
+      case "Patient":
+        return "#479f76";
+      case "Physician":
+        return "#0D6EFD";
+      case "Radiologist":
+        return "#DC3545";
+      default:
+        return "#479f76";
+    }
+  };
     const headerStyle = {
         color: '#0D6EFD',
 
@@ -13,7 +25,7 @@ function DashboardSection({isLast, headerDescription, paragraphDescription, butt
     const buttonStyle = {
         width: '250px',
         height: '50px',
-        backgroundColor: "#479f76",
+        backgroundColor: roleColor(role),
         color: 'white',
         borderRadius: '5px',
         fontSize:'20px'
