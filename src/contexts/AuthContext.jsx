@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 import { firebaseAuth, signInWithEmailAndPassword } from "../auth.js";
-
-const MODE = import.meta.env.VITE_VERCEL_ENV ?? import.meta.env.MODE;
-
-const API_URL =
-  MODE === "production"
-    ? "https://api.radiologyarchive.com"
-    : "https://dev-api.radiologyarchive.com";
+import { API_URL } from "../constants.js";
 
 const FirebaseAuthContext = React.createContext(null);
 
