@@ -76,7 +76,12 @@ export function FirebaseAuthProvider({ children }) {
             .then((data) => setRole(data.role));
         });
       } catch (err) {
-        console.log(err);
+        if (
+          err.message ===
+          "Cannot read properties of null (reading 'getIdToken')"
+        )
+          return;
+        console.log(err.message);
       }
 
       // Schedule token renewal before it expires (55 minutes)
