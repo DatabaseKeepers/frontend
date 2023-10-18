@@ -16,7 +16,7 @@ import { useAuth } from "../contexts/AuthContext";
 import WebFooter from "./WebFooter";
 
 function ImageUpload() {
-  const [selectedPatient, setSelectedPatient] = React.useState(null);
+  const [selectedPatient, setSelectedPatient] = React.useState("");
   const [image, setImage] = React.useState(null);
   const [notes, setNotes] = React.useState(null);
 
@@ -28,7 +28,9 @@ function ImageUpload() {
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
+      console.log(e.target.files[0]);
       setImage(e.target.files[0]);
+      setPreviewImageURL(null);
       setUploading(false);
     }
   };
@@ -78,9 +80,14 @@ function ImageUpload() {
               },
             })
               .then((res) => res.json())
-              .then(
-                (data) => data.success && alert("Image uploaded successfully!")
-              );
+              .then((data) => {
+                if (data.success) {
+                  alert("Image uploaded successfully!");
+                  setImage(null);
+                  setPreviewImageURL(null);
+                  setSelectedPatient("");
+                }
+              });
           })
           .catch((error) => {
             console.log("Error getting image URL: ", error);
@@ -113,6 +120,8 @@ function ImageUpload() {
     }
   }, [image]);
 
+  const uploadEnabled = selectedPatient && image;
+
   return (
     <>
       <Container fluid style={{ background: "#f2f9ff" }} className="px-5">
@@ -130,6 +139,7 @@ function ImageUpload() {
               aria-label="Select a Patient"
               onChange={(e) => setSelectedPatient(e.target.value)}
               name="patient_uid"
+              value={selectedPatient}
             >
               {patients ? (
                 <option>Select a Patient</option>
@@ -164,6 +174,7 @@ function ImageUpload() {
               id="imageUpload"
               label="Choose an image"
               onChange={handleChange}
+              onClick={(e) => (e.target.value = null)}
               type="file"
               style={{ display: "none" }}
             />
@@ -195,7 +206,12 @@ function ImageUpload() {
             />
           </Form.Group>
 
-          <Button className="mb-5 ms-4" variant="primary" type="submit">
+          <Button
+            className="mb-5 ms-4"
+            variant="primary"
+            type="submit"
+            disabled={!uploadEnabled}
+          >
             Complete Upload
           </Button>
 
