@@ -6,7 +6,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import RadioArchiveLogo from "../assets/RadioArchiveLogo.png";
 import person from "../assets/person.png";
 import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 import "./NavBar.css";
+
+const SHOW_TITLE_PATHS = ["/dashboard", "/profile"];
 
 const NavBar = () => {
   const location = useLocation();
@@ -46,7 +49,7 @@ const NavBar = () => {
   };
 
   React.useEffect(() => {
-    if (location.pathname === "/dashboard") {
+    if (SHOW_TITLE_PATHS.includes(location.pathname)) {
       setShowTitle(true);
     }
   }, [location.pathname]);
@@ -120,9 +123,13 @@ const NavBar = () => {
             <Dropdown.ItemText style={boldName}>
               {user.displayName || user.email}
             </Dropdown.ItemText>
-            <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-            <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-            <Dropdown.Item href="TODO" disabled={true}>
+            <Dropdown.Item as={Link} to="/dashboard">
+              Dashboard
+            </Dropdown.Item>
+            <Dropdown.Item as={Link} to="/profile">
+              Profile
+            </Dropdown.Item>
+            <Dropdown.Item as={Link} to="TODO" disabled={true}>
               Notifications
             </Dropdown.Item>
             <Dropdown.Item onClick={signout}>Log Out</Dropdown.Item>
