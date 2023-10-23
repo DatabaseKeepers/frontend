@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import ImageUpload from "./components/ImageUpload";
 import NavBar from "./components/NavBar";
 import Profile from "./components/Profile";
+import PrivateRoute from "./components/PrivateRoute";
 import SigninForm from "./components/SigninForm";
 import Signup from "./components/Signup";
 import { FirebaseAuthProvider } from "./contexts/AuthContext";
@@ -21,7 +22,14 @@ function App() {
             <Route path="profile" Component={Profile} />
             <Route path="signin" Component={SigninForm} />
             <Route path="signup" Component={Signup} />
-            <Route path="upload" element={<ImageUpload />} />
+            <Route
+              path="upload"
+              element={
+                <PrivateRoute>
+                  <ImageUpload />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="*"
               Component={() => (
