@@ -29,12 +29,13 @@ const NavBar = () => {
       case "Physician":
         return "#0D6EFD";
       case "Radiologist":
-        return "#DC3545";
+        return "#E35D6A";
     }
   };
 
   const backgroundStyle = {
     backgroundColor: roleColor(role),
+    border: roleColor(role),
   };
   const titleStyle = {
     fontSize: "2rem",

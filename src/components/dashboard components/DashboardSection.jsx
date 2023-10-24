@@ -9,7 +9,7 @@ function DashboardSection({role, isLast, headerDescription, paragraphDescription
       case "Physician":
         return "#0D6EFD";
       case "Radiologist":
-        return "#DC3545";
+        return "#E35D6A";
       default:
         return "#479f76";
     }

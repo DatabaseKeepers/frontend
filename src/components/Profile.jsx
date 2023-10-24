@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { API_URL } from "../constants";
 import { useAuth } from "../contexts/AuthContext";
+import EditProfile from "./EditProfile";
 import WebFooter from "./WebFooter";
 
 function Profile() {
@@ -18,7 +19,7 @@ function Profile() {
       case "Physician":
         return "#0D6EFD";
       case "Radiologist":
-        return "#DC3545";
+        return "#E35D6A";
     }
   };
 
@@ -137,12 +138,20 @@ function Profile() {
               })}
           </>
         )}
+        <EditProfile
+          profile={data.profile}
+          roleColor={roleColor(role)}
+          role={role}
+        />
         <Row style={{ marginTop: "16rem" }}>
           <Col xs={4}>
             <Button
               as={Link}
               to="/dashboard"
-              style={{ backgroundColor: roleColor(role) }}
+              style={{
+                border: roleColor(role),
+                backgroundColor: roleColor(role),
+              }}
             >
               Back to Dashboard
             </Button>
