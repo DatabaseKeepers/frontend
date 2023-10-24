@@ -1,0 +1,75 @@
+.App {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  header {
+    text-align: left;
+    background-color: #5314BA;
+    padding: 20px;
+    color: white;
+    font-size: 24px;
+    font-family: Courier;
+  }
+
+  footer{
+    position: absolute;
+    left:0;
+    bottom:0;
+    right:0;
+  }
+
+  .checkmark{
+    width: 100px;
+    height:100px;
+    margin:0 auto 20px;
+    display:block;
+  }
+
+  li{
+    margin: 50px;
+    padding-right: 100px;
+    padding-left: 100px;
+  }
+  .paymentComplete {
+    margin-top: 20px;
+  }
+  
+  .greenText {
+    color: #007f3b;
+  }
+  
+  .boldText {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .smallerText {
+    font-size: 14px;
+    color: black;
+  }
+  
+  .dashBoardButton {
+    background-color: #007f3b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .dashBoardButton:hover {
+    background-color: #005d29;
+  }
+  .paymentContainer {
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+  }
+  
+  
