@@ -11,6 +11,10 @@
   display: flex;
 }
 
+.form-label {
+  font-weight: 600;
+}
+
 .signinWrapper {
   margin: 0;
   padding: 0;
@@ -26,7 +30,7 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  width: 40%;
+  width: 60%;
   overflow: auto;
 }
 

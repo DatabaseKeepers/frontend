@@ -1,9 +1,18 @@
 import React from "react";
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Container,
+  Form,
+  Image,
+  Row,
+} from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RadioArchiveLogo from "../assets/RadioArchiveLogo.png";
+import { API_URL } from "../constants";
 import { useAuth } from "../contexts/AuthContext";
-import "./Form.css";
 
 function Signup() {
   const {
@@ -11,6 +20,7 @@ function Signup() {
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm({
     defaultValues: {
       email: "",
@@ -21,11 +31,27 @@ function Signup() {
       first_name: "",
       last_name: "",
       title: "",
-      role: "PATIENT",
+      role: "",
+      hospital: "",
     },
   });
   const navigate = useNavigate();
   const { signup } = useAuth();
+
+  const [hospitals, setHospitals] = React.useState([]);
+  const watchRole = watch("role");
+
+  React.useEffect(() => {
+    const getHospitals = async () => {
+      const response = await fetch(`${API_URL}/api/hospital/hospitals`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      setHospitals(data.hospitals);
+    };
+    getHospitals();
+  }, []);
 
   const onSubmit = (data) => {
     const email = data.email.toLowerCase().trim();
@@ -37,13 +63,14 @@ function Signup() {
     const last_name = data.last_name;
     const title = data.title;
     const role = data.role;
+    const hospital = data.hospital;
 
-    signup(email, password, dob, first_name, last_name, title, role)
+    signup(email, password, dob, first_name, last_name, title, role, hospital)
       .then((data) => {
         if (data.errors) {
           setError("root.serverError", { message: data.errors[0].msg });
         } else {
-          navigate("/dashboard");
+          navigate("/signin");
         }
       })
       .catch((err) => console.log(err));
@@ -54,81 +81,108 @@ function Signup() {
   };
 
   return (
-    <div className="signinWrapper">
-      <div className="signinContainer">
-        <div>
-          <form
-            autoComplete="off"
-            className="form"
-            onSubmit={handleSubmit(onSubmit)}
+    <div style={{ backgroundColor: "#5314ba", height: "100vh" }}>
+      <Container
+        style={{ height: "100vh", maxWidth: "800px" }}
+        className="bg-white overflow-auto px-5"
+      >
+        <Row className="justify-content-center py-3 pt-sm-0">
+          <Col className="p-0" xs="auto" sm="auto" md="auto" lg="auto">
+            <Image src={RadioArchiveLogo} alt="logo" fluid />
+          </Col>
+          <Col
+            className="p-0 align-self-center"
+            xs="auto"
+            sm="auto"
+            md="auto"
+            lg="auto"
           >
-            <h1>
-              <img src={RadioArchiveLogo} />
+            <h2>
               <span className="titleSpans" id="radiology">
                 Radiology
               </span>
               <span className="titleSpans" id="archive">
                 Archive
               </span>
-            </h1>
+            </h2>
+          </Col>
+        </Row>
 
-            <div className="form-row">
-              <span>Role</span>
-              <select className="form-select" name="role" {...register("role")}>
-                <option default hidden value="">
-                  Choose a role
-                </option>
-                <option value="PATIENT">Patient</option>
-                <option value="PHYSICIAN">Physician</option>
-                <option value="RADIOLOGIST">Radiologist</option>
-              </select>
-              <span>Title</span>
-              <select
-                className="form-select"
-                name="title"
-                {...register("title")}
-              >
-                <option default hidden value="">
-                  Title
-                </option>
-                <option value="Mr.">Mr.</option>
-                <option value="Mrs.">Mrs.</option>
-                <option value="Ms.">Ms.</option>
-                <option value="Dr.">Dr.</option>
-              </select>
-            </div>
+        <Row className="">
+          <Form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+            <Row className="mb-4">
+              <Col xs={5} sm={4}>
+                <Form.Group>
+                  <Form.Label htmlFor="role">Role</Form.Label>
+                  <Form.Select
+                    className="form-select"
+                    id="role"
+                    name="role"
+                    {...register("role", { required: true })}
+                  >
+                    <option default hidden value="">
+                      Choose a role
+                    </option>
+                    <option value="PATIENT">Patient</option>
+                    <option value="PHYSICIAN">Physician</option>
+                    <option value="RADIOLOGIST">Radiologist</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              {watchRole === "PHYSICIAN" && (
+                <Col>
+                  <Form.Group>
+                    <Form.Label htmlFor="hospital">Hospital</Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      id="hospital"
+                      name="hospital"
+                      {...register("hospital", {
+                        required: "Hospital is required for physicians",
+                        validate: watchRole === "PHYSICIAN",
+                      })}
+                    >
+                      <option default hidden value="">
+                        Select hospital
+                      </option>
+                      {hospitals &&
+                        hospitals.map((hospital) => {
+                          return (
+                            <option key={hospital.uid} value={hospital.uid}>
+                              {hospital.name}
+                            </option>
+                          );
+                        })}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              )}
+            </Row>
 
-            <div className="form-row">
-              <div className="form-label">
-                <div className="form-row">
-                  <div className="form-label">
-                    <label htmlFor="email">
-                      <span>Email</span>
-                    </label>
-                  </div>
-                  <input
-                    id="email"
-                    name="email"
-                    type="text"
-                    placeholder="Enter your email" // Set the placeholder text here
-                    {...register("email", {
-                      required: true,
-                      pattern: {
-                        value: /\S+@\S+\.\S+/,
-                        message: "Email address must be valid",
-                      },
-                    })}
-                    autoComplete="true"
-                    aria-invalid={errors.email ? "true" : "false"}
-                    style={{ width: "100%", maxWidth: "500px" }} // Adjust the width as needed
-                  />
-                  {errors.email && (
-                    <p style={errorText}>{errors.email.message}</p>
-                  )}
-                </div>
-                <span>Your Name</span>
-                <div className="form-row">
-                  <input
+            <Row className="align-items-end mb-4">
+              <Col xs={3} sm={2}>
+                <Form.Group>
+                  <Form.Label htmlFor="Title">Title</Form.Label>
+                  <Form.Select
+                    className=""
+                    id="Title"
+                    name="title"
+                    {...register("title")}
+                  >
+                    <option default hidden value=""></option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                    <option value="Dr.">Dr.</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label htmlFor="first_name"></Form.Label>
+                  <Form.Control
+                    as="input"
+                    id="first_name"
                     name="first_name"
                     type="text"
                     {...register("first_name", {
@@ -136,8 +190,15 @@ function Signup() {
                     })}
                     autoComplete="true"
                     placeholder="First Name"
+                    aria-label="First Name"
                   />
-                  <input
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Control
+                    as="input"
+                    id="last_name"
                     name="last_name"
                     type="text"
                     {...register("last_name", {
@@ -145,6 +206,7 @@ function Signup() {
                     })}
                     autoComplete="true"
                     placeholder="Last Name"
+                    aria-label="Last Name"
                   />
                   {errors.first_name && (
                     <p style={errorText}>{errors.first_name.message}</p>
@@ -152,17 +214,18 @@ function Signup() {
                   {errors.last_name && (
                     <p style={errorText}>{errors.last_name.message}</p>
                   )}
-                </div>
-              </div>
-            </div>
+                </Form.Group>
+              </Col>
+            </Row>
 
-            <div className="form-row">
-              <div className="form-label">
-                <label>
-                  <span>DOB</span>
-                  <select
+            <Row className="align-items-end mb-4">
+              <Col>
+                <Form.Group>
+                  <Form.Label htmlFor="dob">Date of Birth</Form.Label>
+                  <Form.Select
                     autoComplete="bday-month"
                     className="form-select"
+                    id="dob"
                     name="bday-month"
                     {...register("bday-month", {
                       required: "Month is required",
@@ -183,98 +246,123 @@ function Signup() {
                     <option value="10">October</option>
                     <option value="11">November</option>
                     <option value="12">December</option>
-                  </select>
-                  <div className="flex">
-                    <input
-                      autoComplete="bday-day"
-                      name="bday-day"
-                      placeholder="Day"
-                      type="number"
-                      {...register("bday-day", { required: "Day is required" })}
-                    />
-                    <input
-                      autoComplete="bday-year"
-                      name="bday-year"
-                      {...register("bday-year", {
-                        required: "Year is required",
-                        minLength: 4,
-                        maxLength: 4,
-                      })}
-                      placeholder="Year"
-                      type="string"
-                    />
-                  </div>
-                  {errors["bday-month"] && (
-                    <p style={errorText}>{errors["bday-month"].message}</p>
-                  )}
-                  {errors["bday-day"] && (
-                    <p style={errorText}>{errors["bday-day"].message}</p>
-                  )}
-                  {errors["bday-year"] && (
-                    <p style={errorText}>{errors["bday-year"].message}</p>
-                  )}
-                </label>
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-label">
-                <label htmlFor="password">
-                  <span>Password</span>
-                </label>
-              </div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Create your password" // Set the placeholder text here
-                {...register("password", {
-                  required: true,
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters long",
-                  },
-                })}
-                aria-invalid={errors.password ? "true" : "false"}
-                style={{ width: "100%", maxWidth: "500px" }} // Adjust the width as needed
-              />
-              {errors.password && (
-                <p style={errorText}>{errors.password.message}</p>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="bday-day"
+                    name="bday-day"
+                    placeholder="Day"
+                    type="number"
+                    {...register("bday-day", {
+                      required: "Day is required",
+                    })}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="bday-year"
+                    name="bday-year"
+                    {...register("bday-year", {
+                      required: "Year is required",
+                      minLength: 4,
+                      maxLength: 4,
+                    })}
+                    placeholder="Year"
+                    type="string"
+                  />
+                </Form.Group>
+              </Col>
+              {errors["bday-month"] && (
+                <p style={errorText}>{errors["bday-month"].message}</p>
               )}
-            </div>
-            <div className="form-row">
-              <div className="btn">
-                {errors.root ? (
-                  <p style={errorText}>{errors.root.serverError.message}</p>
-                ) : null}
-                <button
-                  title="Signup"
+              {errors["bday-day"] && (
+                <p style={errorText}>{errors["bday-day"].message}</p>
+              )}
+              {errors["bday-year"] && (
+                <p style={errorText}>{errors["bday-year"].message}</p>
+              )}
+            </Row>
+
+            <Row className="mb-4">
+              <Col>
+                <Form.Group>
+                  <Form.Label htmlFor="email">Email</Form.Label>
+                  <Form.Control
+                    as="input"
+                    id="email"
+                    name="email"
+                    type="text"
+                    placeholder="Enter your email" // Set the placeholder text here
+                    {...register("email", {
+                      required: true,
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Email address must be valid",
+                      },
+                    })}
+                    autoComplete="true"
+                    aria-invalid={errors.email ? "true" : "false"}
+                  />
+                  {errors.email && (
+                    <p style={errorText}>{errors.email.message}</p>
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group>
+                <Form.Label htmlFor="password">
+                  <span>Password</span>
+                </Form.Label>
+                <Form.Control
+                  as="input"
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Create your password" // Set the placeholder text here
+                  {...register("password", {
+                    required: true,
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters long",
+                    },
+                  })}
+                  aria-invalid={errors.password ? "true" : "false"}
+                />
+                {errors.password && (
+                  <p style={errorText}>{errors.password.message}</p>
+                )}
+              </Form.Group>
+            </Row>
+            <Row>
+              {errors.root ? (
+                <p style={errorText}>{errors.root.serverError.message}</p>
+              ) : null}
+              <ButtonGroup>
+                <Button
                   aria-label="Signup"
+                  className="my-5 rounded"
+                  title="Signup"
                   type="submit"
-                  style={{
-                    width: "400px", // Increase the width as needed
-                    height: "35px", // Increase the height as needed
-                    backgroundColor: "#0D6EFD",
-                    borderRadius: "3px",
-                    border: "none",
-                    color: "white",
-                    marginBottom: "75px",
-                    marginTop: "25px",
-                  }}
                 >
                   Sign Up
-                </button>
-              </div>
-            </div>
-          </form>
-          <div className="option">
-            <a onClick={() => navigate("/signin")}>Returning User?</a>
-            <a onClick={() => navigate("/signin")}>
-              <button>Sign In</button>
-            </a>
-          </div>
-        </div>
-      </div>
+                </Button>
+              </ButtonGroup>
+            </Row>
+            <Container className="d-flex flex-wrap justify-content-center">
+              <span>Returning user?&nbsp;</span>
+              <Link style={{ color: "#5314ba" }} to="/signin">
+                Sign In
+              </Link>
+            </Container>
+          </Form>
+        </Row>
+      </Container>
     </div>
   );
 }

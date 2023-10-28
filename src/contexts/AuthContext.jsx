@@ -18,7 +18,7 @@ export function FirebaseAuthProvider({ children }) {
   }, []);
 
   const signup = React.useCallback(
-    async (email, password, dob, first_name, last_name, title, role) => {
+    async (email, password, dob, first_name, last_name, title, role, hospital) => {
       try {
         return await fetch(API_URL + "/api/auth/signup", {
           method: "POST",
@@ -31,6 +31,7 @@ export function FirebaseAuthProvider({ children }) {
             last_name,
             title,
             role,
+            hospital,
           }),
         }).then((res) => res.json());
       } catch (err) {
