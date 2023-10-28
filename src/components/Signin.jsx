@@ -49,7 +49,7 @@ function Signin() {
   const loginButtonStyle = {
     backgroundColor: "#0D6EFD",
     borderRadius: "3px",
-    width: "190px",
+    width: "16rem",
     border: "none",
     color: "white",
     height: "35px",
@@ -81,6 +81,7 @@ function Signin() {
             id="email"
             name="email"
             type="text"
+            style={{ width: "16rem" }}
             autoComplete="true"
           />
           {errors.email && <p>{errors.email.message}</p>}
@@ -97,6 +98,7 @@ function Signin() {
             name="password"
             type="password"
             required
+            style={{ width: "16rem" }}
             autoComplete="true"
           />
           {errors.password && <p>{errors.password.message}</p>}
