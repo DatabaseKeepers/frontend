@@ -60,12 +60,12 @@ return<>
             <div style={selectContainer}>
                 <select>
                     <option value="" disabled selected>Your radiologist</option>
-                    <option value="">Dr. Allison Mitchell</option>
-                    <option value="">Dr. Benjamin Patel</option>
-                    <option value="">Dr. Emily Rodriguez</option>
-                    <option value="">Dr. James Anderson</option>
-                    <option value="">Dr. Olivia Chang</option>
-                    <option value="">Dr. Michael Nguyen</option>
+                    <option value="">Dr. John Radiologist</option>
+                    <option value="">Dr. Monica Kirk</option>
+                    <option value="">Dr. Emily Johnson</option>
+                    <option value="">Dr. David Smith</option>
+                    <option value="">Dr. Laura Davis</option>
+                    <option value="">Dr. Robert Rivera</option>
                 </select>
             </div>
             <button style={buttonStyle}>Go to Payment</button>
