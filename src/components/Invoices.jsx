@@ -3,7 +3,6 @@ import Banner from "./Banner";
 import { Col, Container, ListGroup, Row } from "react-bootstrap";
 import { API_URL } from "../constants.js";
 import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
 
 function Invoices() {
   const [invoices, setInvoices] = useState([]);

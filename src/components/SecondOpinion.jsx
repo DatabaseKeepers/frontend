@@ -50,12 +50,13 @@ function SecondOpinion() {
       .then((data) => {
         setInvoicing(false);
         alert(data.msg);
-        navigate("/invoices");
+        if (data.success) navigate("/invoices");
       })
       .catch((error) => {
         setInvoicing(false);
         console.log(error);
-      });
+      })
+      .finally(() => setInvoicing(false));
   };
 
   useEffect(() => {
@@ -103,7 +104,7 @@ function SecondOpinion() {
               <Form.Label htmlFor="radiologistSelect">
                 Select the radiologist that is best for you!
               </Form.Label>
-              <Col xs={6}>
+              <Col xs={12} sm={6}>
                 <Form onSubmit={handleRadiologistSelect}>
                   <Form.Select id="radiologistSelect">
                     <option>Select a radiologist</option>
