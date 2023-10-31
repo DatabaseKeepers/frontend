@@ -54,6 +54,13 @@ export default function PortalCenter({ role }) {
         btnLink: "/imagelibrary",
       },
       {
+        title: "View Your Invoices.",
+        description:
+          "",
+        btnText: "Invoice History",
+        btnLink: "/invoices",
+      },
+      {
         title: "Want a Second Opinion?",
         description:
           "If you want a better understanding of your medical image, we provide a wide selection of radiologists for you! All you need to is select the radiologist that is right for you and they’ll be on their way to interpret your chosen image!",
