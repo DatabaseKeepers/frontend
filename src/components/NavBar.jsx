@@ -13,10 +13,6 @@ const SHOW_TITLE_PATHS = ["/dashboard", "/profile"];
 const NavBar = () => {
   const location = useLocation();
 
-  if (location.pathname === "/signin" || location.pathname === "/signup") {
-    return null;
-  }
-
   const { role, user, signout } = useAuth();
   const [showTitle, setShowTitle] = React.useState(false);
   const navigate = useNavigate();
@@ -53,6 +49,10 @@ const NavBar = () => {
       setShowTitle(true);
     }
   }, [location.pathname]);
+
+  if (location.pathname === "/signin" || location.pathname === "/signup") {
+    return <></>;
+  }
 
   const LoggedOutDropdown = () => {
     return (

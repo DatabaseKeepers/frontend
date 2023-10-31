@@ -36,7 +36,7 @@ function Signup() {
     },
   });
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { signin, signup } = useAuth();
 
   const [hospitals, setHospitals] = React.useState([]);
   const watchRole = watch("role");
@@ -70,7 +70,28 @@ function Signup() {
         if (data.errors) {
           setError("root.serverError", { message: data.errors[0].msg });
         } else {
-          navigate("/signin");
+          signin(email, password)
+            .then((data) => {
+              if (data.errors) {
+                setError("root.serverError", {
+                  message: "The email or password is incorrect",
+                });
+              } else {
+                navigate("/dashboard");
+              }
+            })
+            .catch((err) => {
+              if (err.code === "auth/invalid-login-credentials") {
+                setError("root.serverError", {
+                  message: "The email or password is incorrect",
+                });
+              } else {
+                setError("root.serverError", {
+                  message: "Something went wrong",
+                });
+              }
+              console.error(err);
+            });
         }
       })
       .catch((err) => console.log(err));
