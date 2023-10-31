@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
+import { API_URL } from "../constants";
+import { useAuth } from "../contexts/AuthContext";
 import Banner from "./Banner";
 import WebFooter from "./WebFooter";
-import { useAuth } from "../contexts/AuthContext";
 import SecondOpinionCenter from "./second opinion components/SecondOpinionCenter";
-import { API_URL } from "../constants";
-import Form from "react-bootstrap/Form";
-import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 function SecondOpinion() {
   const [radiologists, setRadiologists] = useState([]);
@@ -50,7 +50,7 @@ function SecondOpinion() {
       .then((data) => {
         setInvoicing(false);
         alert(data.msg);
-        if (data.success) navigate("/invoices");
+        navigate("/invoices");
       })
       .catch((error) => {
         setInvoicing(false);
