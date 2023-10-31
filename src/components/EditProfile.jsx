@@ -153,7 +153,7 @@ function EditProfile(props) {
     <Container fluid className="p-0">
       {isEditing && (
         <h2 className="my-5" style={{ color: "#0d6efd" }}>
-          Editting profile
+          Editing profile
         </h2>
       )}
       <Card className="p-4" style={{ backgroundColor: "#adb5bd" }}>
