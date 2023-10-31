@@ -40,9 +40,9 @@ function Home() {
                 from. <br /> View your physician's notes and get a second
                 opinion.
               </p>
-              <a href="/Signup" className="btn btn-primary signup">
+              <Link to="/signup" className="btn btn-primary signup">
                 Sign Up
-              </a>
+              </Link>
             </Col>
             <Col xs={12} md={6}>
               <Image fluid src={docvisit} />
