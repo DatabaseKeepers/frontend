@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import Banner from "./Banner";
 import WebFooter from "./WebFooter";
-import { useAuth } from "../contexts/AuthContext";
 import DashboardSection from "./dashboard components/DashboardSection";
 
 export default function ImageView() {
@@ -13,6 +13,7 @@ export default function ImageView() {
   const [newNote, setNewNote] = useState("");
   const { role } = useAuth();
 
+
   const roleColor = (role) => {
     if (role == "Radiologist") {
         return "#E35D6A";
@@ -20,20 +21,20 @@ export default function ImageView() {
     return "#0D6EFD"; // Physician color
 }
   // Image URL
-  const imageUrl = 'https://image.freepik.com/free-photo/spine-x-ray_1101-459.jpg';
-  
+  // const imageUrl = 'https://image.freepik.com/free-photo/spine-x-ray_1101-459.jpg';
+
   const textInputStyle = {
     height: "250px",
-    width: "80%", 
-    padding: "10px", 
-    fontSize: "16px", 
-    marginTop: "5px", 
-    border: "2px solid #ccc", 
-    borderRadius: "5px", 
-    boxSizing: "border-box", 
-    display: "block", 
-    margin: "0 auto", 
-    textAlign: "left", 
+    width: "80%",
+    padding: "10px",
+    fontSize: "16px",
+    marginTop: "5px",
+    border: "2px solid #ccc",
+    borderRadius: "5px",
+    boxSizing: "border-box",
+    display: "block",
+    margin: "0 auto",
+    textAlign: "left",
 };
   function handleChange(event) {
     setNewNote(event.target.value);
@@ -50,7 +51,7 @@ export default function ImageView() {
     justifyContent: "center",
     // width:"50%",
     // height:'auto',
-    gap: "15%",
+    // gap: "15%",
     marginBottom: "10rem"
   };
 
@@ -82,9 +83,9 @@ export default function ImageView() {
     border: "1px solid grey",
     // backgroundColor: "grey",
   };
-  
+
   const imageStyle={
-    width: "600px",
+    width: "300px",
     height: "auto",
     marginLeft: "40px"
   }
@@ -96,7 +97,7 @@ export default function ImageView() {
   const introStyle ={
     color: '#0D6EFD',
     margin: '3rem'
-  } 
+  }
   const buttonStyle= {
     marginLeft: "auto",
     color: "grey",
@@ -149,7 +150,7 @@ export default function ImageView() {
 
       <div style={containerStyle}>
         <div>
-          <img style={imageStyle} src={imageUrl} alt="Medical Image" />
+          <img className="p-5" style={imageStyle} src={image.url} alt="Medical Image" />
         </div>
         <div style={opinionWrapperStlye}>
           <div style={noteHeaderStyle} onClick={()=>setShowNote(!showNote)}>
@@ -163,7 +164,7 @@ export default function ImageView() {
             </button>
           </div>
           {showNote &&
-            (image.authors && image.authors.length > 0? (
+            (image.authors && image.authors.length > 0 ? (
               image.authors.map((author) => {
                 if (author.role === "PHYSICIAN") {
                   return (
@@ -177,14 +178,13 @@ export default function ImageView() {
               })
             ) : (
               <div style={opinionStyle}>
-                <p>"test"</p>
-                <p>"test"</p>
+                <p>No opinions</p>
               </div>
             ))}
 
           <div style={opinionsHeaderStyle} onClick={()=>setShowOpinions(!showOpinions)}>
             <span style={spanStyle}>Radiologist Notes:</span>
-            <button 
+            <button
               style={buttonStyle}
               onClick={() => {
                 setShowOpinions(!showOpinions);
@@ -220,7 +220,7 @@ export default function ImageView() {
           </div>
           <br />
           <textarea
-          id="note"  
+          id="note"
           type="text"
             name="note"
             value={newNote}
@@ -234,10 +234,10 @@ export default function ImageView() {
       )}
 
       {role === "Patient" && (
-      
+
       <div>
         <div style={divider}></div>
-       <DashboardSection 
+       <DashboardSection
        role={role}
        isLast={true}
        headerDescription={"Want a Second Opinion?"}

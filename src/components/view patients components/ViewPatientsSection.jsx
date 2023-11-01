@@ -7,7 +7,7 @@ const ViewPatientsSection = ({profileImage, patientName, dob, patientEmail, addi
     const navigate = useNavigate();
 
     const [showAdditionalText, setShowAdditionalText] = useState(false);
-    
+
     const toggleAdditionalText = () => {
         setShowAdditionalText(!showAdditionalText);
     };
@@ -53,14 +53,14 @@ const ViewPatientsSection = ({profileImage, patientName, dob, patientEmail, addi
         cursor: 'pointer',
         display: 'center',
         borderRadius: '5px',
-        marginRight: '2rem', 
+        marginRight: '2rem',
         backgroundColor: roleColor(role),
     }
     const additionalTextStyle = {
         fontSize: '16px',
         marginTop: '10px',
         marginLeft: '10px',
-    }    
+    }
     const additionalTextDiv={
         display: 'flex',
         flexDirection: 'column',
@@ -69,7 +69,7 @@ const ViewPatientsSection = ({profileImage, patientName, dob, patientEmail, addi
 
     return (
     <div style={wrapperStyle}>
-    <div style={initialContainer}> 
+    <div style={initialContainer}>
          <div>
              <img src={profileImage} alt="Your Image" style={docImageStyle} />
          </div>
@@ -94,7 +94,7 @@ const ViewPatientsSection = ({profileImage, patientName, dob, patientEmail, addi
                 return (
                     <img
                     onClick={() => {
-                        handleClick({ img: image });
+                        handleClick(image);
                     }}
                     key={image.uid}
                     src={image.url}
@@ -116,7 +116,7 @@ const ViewPatientsSection = ({profileImage, patientName, dob, patientEmail, addi
      )}
    </div>
 
-  );        
+  );
  };
 
 export default ViewPatientsSection;

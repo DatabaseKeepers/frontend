@@ -56,7 +56,7 @@ export default function ImageLibrary() {
     justifyContent: "center",
     flexDirection: "column"
   }
-  const imageStyle ={ 
+  const imageStyle ={
     minWidth: "200px",
     height: "auto",
     maxWidth: "200px",
@@ -94,7 +94,7 @@ export default function ImageLibrary() {
     display: "center",
     borderRadius: "5px",
     backgroundColor: '#479F76'
-    
+
   }
 
   //styles end here
@@ -106,7 +106,7 @@ export default function ImageLibrary() {
       {images.map((image) => {
         return (
           <div key={image.uid} style={divStyle}>
-            
+
             <Image src={image.url} style={imageStyle}/>
             <button style={buttonStyle} onClick={() => {handleClick(image)}}>View</button>
           </div>
