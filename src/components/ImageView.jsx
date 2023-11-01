@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../constants.js";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,6 +16,7 @@ export default function ImageView() {
   const [image, setImage] = useState(state.image || {});
   const [showNote, setShowNote] = useState(false);
   const [showOpinions, setShowOpinions] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [newNote, setNewNote] = useState(
     state.image.authors.find((author) => author.uid === user.uid)?.note || ""
   );
@@ -45,6 +47,7 @@ export default function ImageView() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setSubmitting(true);
     fetch(`${API_URL}/api/image/${image.uid}`, {
       method: "PUT",
       body: JSON.stringify({
@@ -69,15 +72,22 @@ export default function ImageView() {
             url: prev.url,
             authors: newAuthors,
           }));
+          // timeout to simulate a delay in submitting
+          setTimeout(() => {
+            setSubmitting(false);
+            alert("Note updated successfully!");
+          }, 250);
           // this is required to update the state of the image in the dashboard
           // without this, the image will not show the updated note when refreshing
           navigate(pathname, { state: { image } });
         } else {
           alert("Error updating note");
+          setSubmitting(false);
         }
       })
       .catch((error) => {
         console.log("Error updating note: ", error);
+        setSubmitting(false);
       });
   }
 
@@ -275,7 +285,18 @@ export default function ImageView() {
           />
           <br />
           <button type="submit" style={buttonStyle1}>
-            Submit Analysis
+            {submitting ? (
+              <Spinner
+                className="mx-5"
+                size="sm"
+                animation="border"
+                role="status"
+              >
+                <span className="visually-hidden">Submitting...</span>
+              </Spinner>
+            ) : (
+              "Submit Analysis"
+            )}
           </button>
         </form>
       )}
