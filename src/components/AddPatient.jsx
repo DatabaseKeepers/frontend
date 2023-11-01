@@ -104,9 +104,9 @@ function AddPatient() {
                     id="first_name"
                     name="first_name"
                     type="text"
-                    {...register("first_name", {
-                      required: "First name is required",
-                    })}
+                    {...register(
+                      "first_name" /*, { required: "First name is required", }*/
+                    )}
                     autoComplete="true"
                     placeholder="First Name"
                     aria-label="First Name"
@@ -123,9 +123,9 @@ function AddPatient() {
                     id="last_name"
                     name="last_name"
                     type="text"
-                    {...register("last_name", {
-                      required: "Last name is required",
-                    })}
+                    {...register(
+                      "last_name" /*, { required: "Last name is required", }*/
+                    )}
                     autoComplete="true"
                     placeholder="Last Name"
                     aria-label="Last Name"
@@ -149,9 +149,9 @@ function AddPatient() {
                     className="form-select"
                     id="dob"
                     name="bday-month"
-                    {...register("bday-month", {
-                      required: "Month is required",
-                    })}
+                    {...register(
+                      "bday-month" /*, { required: "Month is required", }*/
+                    )}
                   >
                     <option default disabled hidden value="">
                       Month
@@ -178,9 +178,9 @@ function AddPatient() {
                     name="bday-day"
                     placeholder="Day"
                     type="number"
-                    {...register("bday-day", {
-                      required: "Day is required",
-                    })}
+                    {...register(
+                      "bday-day" /*,{ required: "Day is required", }*/
+                    )}
                   />
                 </Form.Group>
               </Col>
@@ -189,11 +189,9 @@ function AddPatient() {
                   <Form.Control
                     autoComplete="bday-year"
                     name="bday-year"
-                    {...register("bday-year", {
-                      required: "Year is required",
-                      minLength: 4,
-                      maxLength: 4,
-                    })}
+                    {...register(
+                      "bday-year" /*, { required: "Year is required", minLength: 4, maxLength: 4, }*/
+                    )}
                     placeholder="Year"
                     type="string"
                   />
