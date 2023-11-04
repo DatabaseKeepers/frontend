@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function DashboardSection({role, isLast, headerDescription, paragraphDescription, buttonDescription, buttonLink}){
 
@@ -47,7 +48,7 @@ function DashboardSection({role, isLast, headerDescription, paragraphDescription
     <div style={divStyle}>
         <h2 style={headerStyle}>{headerDescription}</h2>
         <p style={descriptionStyle}>{paragraphDescription}</p>
-        <a href={buttonLink}><button style={buttonStyle}>{buttonDescription}</button></a>
+        <Link to={buttonLink}><button style={buttonStyle}>{buttonDescription}</button></Link>
         {!isLast && <div style={divider}/>}
     </div>
     )

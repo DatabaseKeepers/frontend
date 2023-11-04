@@ -10,7 +10,7 @@ import "./NavBar.css";
 
 const SHOW_TITLE_PATHS = ["/dashboard", "/profile"];
 
-const NavBar = () => {
+const NavBar = React.memo(() => {
   const location = useLocation();
 
   const { role, user, signout } = useAuth();
@@ -99,7 +99,7 @@ const NavBar = () => {
     );
   };
 
-  const LoggedInDropdown = () => {
+  const LoggedInDropdown = React.memo(({ role, user, signout }) => {
     return (
       <>
         {showTitle && !role && (
@@ -137,7 +137,7 @@ const NavBar = () => {
         </Dropdown>
       </>
     );
-  };
+  });
 
   return (
     <Navbar className="navbar shadow-sm">
@@ -154,8 +154,12 @@ const NavBar = () => {
         <NavbarText id="radiology">Radiology</NavbarText>
         <NavbarText id="archive">Archive</NavbarText>
       </Navbar.Brand>
-      {user ? <LoggedInDropdown /> : <LoggedOutDropdown />}
+      {user ? (
+        <LoggedInDropdown role={role} user={user} signout={signout} />
+      ) : (
+        <LoggedOutDropdown />
+      )}
     </Navbar>
   );
-};
+});
 export default NavBar;
