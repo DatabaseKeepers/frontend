@@ -77,6 +77,10 @@ function Signup() {
                   message: "The email or password is incorrect",
                 });
               } else {
+                if (role === "PATIENT") // Patient sign up message fix
+                {
+                  alert("Share your account email with your physician to get started.");
+                }
                 navigate("/dashboard");
               }
             })
