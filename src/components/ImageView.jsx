@@ -60,6 +60,12 @@ export default function ImageView() {
     })
       .then((res) => res.json())
       .then((data) => {
+        // If api returns errors, display them
+        if (data.errors.length > 0) {
+          alert(data.errors[0].msg);
+          setSubmitting(false);
+        }
+        // If api returns success, update image state
         if (data.success) {
           const newAuthors = image.authors.map((author) => {
             if (author.uid === user.uid) {
@@ -80,6 +86,9 @@ export default function ImageView() {
           // this is required to update the state of the image in the dashboard
           // without this, the image will not show the updated note when refreshing
           navigate(pathname, { state: { image } });
+        } else if (data.msg) {
+          alert(data.msg);
+          setSubmitting(false);
         } else {
           alert("Error updating note");
           setSubmitting(false);
