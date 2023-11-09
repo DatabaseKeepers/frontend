@@ -15,44 +15,47 @@ import SigninForm from "./components/SigninForm";
 import Signup from "./components/Signup";
 import ViewPatients from "./components/ViewPatients";
 import { FirebaseAuthProvider } from "./contexts/AuthContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
 
 function App() {
   return (
     <FirebaseAuthProvider>
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route>
-            <Route index Component={Home} />
-            <Route path="dashboard" Component={Dashboard} />
-            <Route path="profile" Component={Profile} />
-            <Route path="signin" Component={SigninForm} />
-            <Route path="signup" Component={Signup} />
-            <Route path="secondopinion" Component={SecondOpinion} />
-            <Route path="patients" Component={ViewPatients}/>
-            <Route path="addpatient" Component={AddPatient} />
-            <Route path="imagelibrary" Component={ImageLibrary} />
-            <Route path="imageview" Component={ImageView} />
-            <Route path="invoices" Component={Invoices} />
-            <Route
-              path="upload"
-              element={
-                <PrivateRoute>
-                  <ImageUpload />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="*"
-              Component={() => (
-                <h1 style={{ textAlign: "center" }}>
-                  There is nothing on this page.
-                </h1>
-              )}
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <NotificationProvider>
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route>
+              <Route index Component={Home} />
+              <Route path="dashboard" Component={Dashboard} />
+              <Route path="profile" Component={Profile} />
+              <Route path="signin" Component={SigninForm} />
+              <Route path="signup" Component={Signup} />
+              <Route path="secondopinion" Component={SecondOpinion} />
+              <Route path="patients" Component={ViewPatients} />
+              <Route path="addpatient" Component={AddPatient} />
+              <Route path="imagelibrary" Component={ImageLibrary} />
+              <Route path="imageview" Component={ImageView} />
+              <Route path="invoices" Component={Invoices} />
+              <Route
+                path="upload"
+                element={
+                  <PrivateRoute>
+                    <ImageUpload />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="*"
+                Component={() => (
+                  <h1 style={{ textAlign: "center" }}>
+                    There is nothing on this page.
+                  </h1>
+                )}
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </NotificationProvider>
     </FirebaseAuthProvider>
   );
 }
