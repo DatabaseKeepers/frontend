@@ -129,7 +129,7 @@ const NavBar = React.memo(() => {
             <Dropdown.Item as={Link} to="/profile">
               Profile
             </Dropdown.Item>
-            <Dropdown.Item as={Link} to="TODO" disabled={true}>
+            <Dropdown.Item as={Link} to="/notifications">
               Notifications
             </Dropdown.Item>
             <Dropdown.Item onClick={signout}>Log Out</Dropdown.Item>

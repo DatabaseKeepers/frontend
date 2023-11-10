@@ -8,6 +8,7 @@ import ImageUpload from "./components/ImageUpload";
 import ImageView from "./components/ImageView";
 import Invoices from "./components/Invoices";
 import NavBar from "./components/NavBar";
+import Notifications from "./components/Notifications";
 import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./components/Profile";
 import SecondOpinion from "./components/SecondOpinion";
@@ -32,6 +33,7 @@ function App() {
               <Route path="signup" Component={Signup} />
               <Route path="secondopinion" Component={SecondOpinion} />
               <Route path="patients" Component={ViewPatients} />
+              <Route path="notifications" Component={Notifications} />
               <Route path="addpatient" Component={AddPatient} />
               <Route path="imagelibrary" Component={ImageLibrary} />
               <Route path="imageview" Component={ImageView} />
