@@ -28,7 +28,6 @@ function ImageUpload() {
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
-      console.log(e.target.files[0]);
       setImage(e.target.files[0]);
       setPreviewImageURL(null);
       setUploading(false);
