@@ -94,11 +94,16 @@ function Signin() {
                 as="input"
                 id="email"
                 name="email"
+                placeholder="user@example.com"
                 style={{ width: "16rem" }}
                 autoComplete="true"
                 aria-label="email"
               />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-danger fw-semibold">
+                  {errors.email.message}
+                </p>
+              )}
             </Col>
           </Row>
         </Form.Group>
@@ -107,16 +112,19 @@ function Signin() {
             <Col>
               <Form.Label htmlFor="password">Password</Form.Label>
               <Form.Control
-                {...register("password", { required: true })}
+                {...register("password", { required: "Password is required" })}
                 id="password"
                 name="password"
                 type="password"
-                required
                 style={{ width: "16rem" }}
                 autoComplete="true"
                 aria-label="password"
               />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.password && (
+                <p className="text-danger fw-semibold">
+                  {errors.password.message}
+                </p>
+              )}
             </Col>
           </Row>
         </Form.Group>
