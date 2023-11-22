@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { API_URL } from "../constants.js";
+import { Button, Col, Form, Row } from "react-bootstrap";
 
 function Signin() {
   const {
@@ -70,72 +71,74 @@ function Signin() {
     border: "none",
     color: "white",
     height: "35px",
-    marginBottom: "75px",
-    marginTop: "25px",
+    marginTop: "1rem",
+    marginBottom: "1.25rem",
     alignSelf: "center",
   };
 
-  const boldSpan = {
-    color: "black",
-    fontWeight: "600",
-  };
-
   return (
-    <div>
-      <form
+    <Row>
+      <Form
         autoComplete="off"
         className="form"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="form-row">
-          <div className="form-label">
-            <label htmlFor="email">
-              <span style={boldSpan}>Email</span>
-            </label>
-          </div>
-          <input
-            {...register("email", { required: "Email address is required" })}
-            id="email"
-            name="email"
-            type="text"
-            style={{ width: "16rem" }}
-            autoComplete="true"
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-        <div className="form-row">
-          <div className="form-label">
-            <label htmlFor="password">
-              <span style={boldSpan}>Password</span>
-            </label>
-          </div>
-          <input
-            {...register("password", { required: true })}
-            id="password"
-            name="password"
-            type="password"
-            required
-            style={{ width: "16rem" }}
-            autoComplete="true"
-          />
-        </div>
-        <div className="form-row text-center">
-          {errors.root ? (
-            <p className="text-danger fw-semibold mb-0">
-              {errors.root.serverError.message}
-            </p>
-          ) : null}
-          <button
-            style={loginButtonStyle}
-            title="Signin"
-            aria-label="Signin"
-            type="submit"
-          >
-            Log In
-          </button>
-        </div>
-      </form>
-    </div>
+        <Form.Group>
+          <Row className="form-row">
+            <Col>
+              <Form.Label htmlFor="email">Email</Form.Label>
+              <Form.Control
+                {...register("email", {
+                  required: "Email address is required",
+                })}
+                as="input"
+                id="email"
+                name="email"
+                style={{ width: "16rem" }}
+                autoComplete="true"
+                aria-label="email"
+              />
+              {errors.email && <p>{errors.email.message}</p>}
+            </Col>
+          </Row>
+        </Form.Group>
+        <Form.Group>
+          <Row className="form-row">
+            <Col>
+              <Form.Label htmlFor="password">Password</Form.Label>
+              <Form.Control
+                {...register("password", { required: true })}
+                id="password"
+                name="password"
+                type="password"
+                required
+                style={{ width: "16rem" }}
+                autoComplete="true"
+                aria-label="password"
+              />
+              {errors.email && <p>{errors.email.message}</p>}
+            </Col>
+          </Row>
+        </Form.Group>
+        <Row className="form-row text-center">
+          <Col>
+            <Button
+              style={loginButtonStyle}
+              title="Signin"
+              aria-label="Signin"
+              type="submit"
+            >
+              Log In
+            </Button>
+            {errors.root ? (
+              <p className="text-danger fw-semibold">
+                {errors.root.serverError.message}
+              </p>
+            ) : null}
+          </Col>
+        </Row>
+      </Form>
+    </Row>
   );
 }
 
