@@ -46,7 +46,7 @@ export const NotificationProvider = ({ children }) => {
         clearInterval(pollInterval);
       };
     }
-  }, []);
+  }, [user]);
 
   const fetchReadNotifications = async (read) => {
     try {
