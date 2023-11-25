@@ -53,10 +53,14 @@ function SecondOpinion() {
         "Content-Type": "application/json",
         Authorization: "Bearer " + user.accessToken,
       },
+      body: JSON.stringify({ image }),
     })
       .then((res) => res.json())
       .then((data) => {
         setInvoicing(false);
+        if (data.errors && data.errors.length > 0) {
+          alert(data.errors[0].msg);
+        }
         alert(data.msg);
         navigate("/invoices");
       })
