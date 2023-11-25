@@ -5,16 +5,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../constants";
 import { useAuth } from "../contexts/AuthContext";
 import Banner from "./Banner";
+import LoadingSpinner from "./LoadingSpinner";
 import WebFooter from "./WebFooter";
 import SecondOpinionCenter from "./second opinion components/SecondOpinionCenter";
-import LoadingSpinner from "./LoadingSpinner";
+import SecondOpinionImageSelectionModal from "./second opinion components/SecondOpinionImageSelectModal";
 
 function SecondOpinion() {
-  const [radiologists, setRadiologists] = useState([]);
-  const [invoicing, setInvoicing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [image, setSelectedImage] = useState();
+  const [images, setImages] = useState([]);
+  const [invoicing, setInvoicing] = useState(false);
+  const [radiologist, setRadiologist] = useState("");
+  const [radiologists, setRadiologists] = useState([]);
+  const [showImageSelectionModal, setShowImageSelectionModal] = useState(false);
+
   const navigate = useNavigate();
   const { user, role } = useAuth();
+
+  const disableButton =
+    radiologist === "" || radiologist === "Select a radiologist";
 
   const firstDivStyle = {
     margin: "3rem",
@@ -35,12 +44,10 @@ function SecondOpinion() {
     marginLeft: "3rem",
   };
 
-  const handleRadiologistSelect = async (e) => {
-    e.preventDefault();
+  const confirmToPayment = async () => {
     setInvoicing(true);
-    const radiologist_uid = e.target.radiologistSelect.value;
 
-    await fetch(`${API_URL}/api/payment/${radiologist_uid}/invoice`, {
+    await fetch(`${API_URL}/api/payment/${radiologist}/invoice`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +67,31 @@ function SecondOpinion() {
       .finally(() => setInvoicing(false));
   };
 
+  const handleRadiologistSelect = async (e) => {
+    e.preventDefault();
+    setShowImageSelectionModal(true);
+  };
+
   useEffect(() => {
+    const getImages = async () => {
+      fetch(`${API_URL}/api/user/${user.uid}/images`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Fetch failed");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setImages(data.images);
+        })
+        .catch((err) => console.error("Error fetching data: ", err));
+    };
     const getRadiologists = () => {
       fetch(API_URL + "/api/user/radiologists", {
         method: "GET",
@@ -83,12 +114,24 @@ function SecondOpinion() {
           console.error("Error fetching data:", err);
         });
     };
+    getImages();
     getRadiologists();
   }, []);
 
   return (
     <>
       <Banner text="Radiologist Center" />
+      {showImageSelectionModal && (
+        <SecondOpinionImageSelectionModal
+          confirmToPayment={confirmToPayment}
+          images={images}
+          invoicing={invoicing}
+          showModal={showImageSelectionModal}
+          handleClose={setShowImageSelectionModal}
+          selectedImage={image}
+          setSelectedImage={setSelectedImage}
+        />
+      )}
 
       <div style={firstDivStyle}>
         <h2 style={headerStyle}>Our Radiologists!</h2>
@@ -112,7 +155,10 @@ function SecondOpinion() {
               {loading && <LoadingSpinner />}
               <Col xs={12} sm={6}>
                 <Form onSubmit={handleRadiologistSelect}>
-                  <Form.Select id="radiologistSelect">
+                  <Form.Select
+                    id="radiologistSelect"
+                    onChange={(e) => setRadiologist(e.target.value)}
+                  >
                     <option>Select a radiologist</option>
                     {role === "Patient" &&
                       radiologists.map((r) => {
@@ -126,19 +172,13 @@ function SecondOpinion() {
                       })}
                   </Form.Select>
 
-                  <Button className="my-5" variant="primary" type="submit">
-                    {invoicing ? (
-                      <Spinner
-                        className="mx-5"
-                        size="sm"
-                        animation="border"
-                        role="status"
-                      >
-                        <span className="visually-hidden">Invoicing...</span>
-                      </Spinner>
-                    ) : (
-                      "Confirm and Go to Payment"
-                    )}
+                  <Button
+                    className="my-5"
+                    variant="primary"
+                    type="submit"
+                    disabled={disableButton}
+                  >
+                    Go to Image Selection
                   </Button>
                 </Form>
               </Col>
