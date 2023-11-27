@@ -19,6 +19,8 @@ function Profile() {
 
   const [isEditing, setIsEditing] = React.useState(false);
 
+  const [optStatus, setOptStatus] = React.useState(true);
+ 
   const roleColor = (role) => {
     switch (role) {
       case "Patient":
@@ -64,6 +66,8 @@ function Profile() {
         role={role}
         setData={setData}
         staff={data.staff}
+        optStatus = {optStatus}
+        setOptStatus = {setOptStatus}
       />
     );
   } else {
@@ -153,6 +157,17 @@ function Profile() {
                 )}
               </Col>
             </Row>
+        {role === "Radiologist" && (
+          <Row className="my-3 align-items-center">
+            <Col xs={12} md={4} className = " fw-semibold text-md-start"> 
+              {optStatus ? (
+                <p  className = "mb-0 fs-5">You are opted in to our rating system.</p>
+              ) : (
+                <p className = "mb-0 fs-5">You are opted out from our rating system</p>
+              )}  
+            </Col>
+          </Row>
+        )}
           </Container>
           <Row
             className="text-center"

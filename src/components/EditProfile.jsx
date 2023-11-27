@@ -41,6 +41,11 @@ function EditProfile(props) {
   const noProfileChanges =
     ("" === newBio || bio === newBio) && previewImageURL === profile_image_url;
 
+  const { optStatus, setOptStatus} = props;
+  const handleOptStatusChange = (e) => {
+    setOptStatus(e.target.value === "optIn");
+  };
+
   const handleEmailUpdate = () => {
     // Validate and send the new email to the API
     // Reset the state and close the form after update
@@ -330,6 +335,38 @@ function EditProfile(props) {
               </Col>
             </Row>
           )}
+          {role === "Radiologist" && (
+          <Row className="mt-4">
+            <Col>
+              <Form.Group className="mb-3">
+                <div>
+                <Form.Label style = {{marginRight: '50px'}}>Rating System Preference :</Form.Label>
+                
+                  <label style = {{marginRight: '50px' }}>
+                    <input
+                      type = "radio"
+                      name="optStatus"
+                      value="optIn"
+                      checked={optStatus === true}
+                      onChange={handleOptStatusChange}
+                    />
+                    Opt In
+                  </label>
+                  <label >
+                    <input
+                      type = "radio"
+                      name="optStatus"
+                      value="optOut"
+                      checked={optStatus === false}
+                      onChange={handleOptStatusChange}
+                    />
+                    Opt Out
+                  </label>
+                </div>
+              </Form.Group>
+            </Col>
+          </Row>
+        )}
         </Container>
 
         <Row
