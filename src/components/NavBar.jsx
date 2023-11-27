@@ -1,19 +1,19 @@
-import React from "react";
+import { memo, useEffect, useState } from "react";
 import { Button, Nav, Navbar, NavbarText } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import RadioArchiveLogo from "../assets/RadioArchiveLogo.png";
-import person from "../assets/person.png";
 import bell from "../assets/bell.png";
+import person from "../assets/person.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import "./NavBar.css";
 
-const SHOW_TITLE_PATHS = ["/dashboard", "/profile"];
+const SHOW_TITLE_PATHS = ["/dashboard", "/profile", "/notifications"];
 const HIDE_NAVBAR_PATHS = ["/signin", "/signup", "/reset-password"];
 
-const NavBar = React.memo(() => {
+const NavBar = memo(() => {
   const location = useLocation();
 
   const { role, user, signout } = useAuth();
@@ -22,7 +22,7 @@ const NavBar = React.memo(() => {
     (notification) => notification.read === 0
   );
 
-  const [showTitle, setShowTitle] = React.useState(false);
+  const [showTitle, setShowTitle] = useState(false);
   const navigate = useNavigate();
 
   const roleColor = (role) => {
@@ -42,7 +42,6 @@ const NavBar = React.memo(() => {
     height: "100%",
   };
   const titleStyle = {
-    fontSize: "2rem",
     color: roleColor(role),
   };
   const DropdownLogo = {
@@ -70,9 +69,11 @@ const NavBar = React.memo(() => {
     marginRight: "3.5rem",
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (SHOW_TITLE_PATHS.includes(location.pathname)) {
       setShowTitle(true);
+    } else {
+      setShowTitle(false);
     }
   }, [location.pathname]);
 
@@ -125,7 +126,7 @@ const NavBar = React.memo(() => {
     );
   };
 
-  const LoggedInDropdown = React.memo(({ role, user, signout }) => {
+  const PortalTitle = memo(({ role }) => {
     return (
       <>
         {showTitle && !role && (
@@ -135,11 +136,18 @@ const NavBar = React.memo(() => {
         )}
         {showTitle && role && (
           <Nav className="mr-auto text-nowrap">
-            <h2 style={{ fontSize: "2rem" }}>
+            <h2>
               <span style={titleStyle}>{role}</span> Portal
             </h2>
           </Nav>
         )}
+      </>
+    );
+  });
+
+  const LoggedInDropdown = memo(({ user, signout }) => {
+    return (
+      <>
         <div style={{ display: "flex", alignItems: "center", height: "50px" }}>
           <div style={bellDiv}>
             <a href="/notifications">
@@ -152,7 +160,7 @@ const NavBar = React.memo(() => {
               )}
             </a>
           </div>
-          <Dropdown align="end" style={{ marginRight: "50px", height: "100%" }}>
+          <Dropdown align="end" className="me-5" style={{ height: "100%" }}>
             <Dropdown.Toggle style={backgroundStyle} id="loginDropdown">
               <img src={person} style={DropdownLogo} />
             </Dropdown.Toggle>
@@ -179,12 +187,8 @@ const NavBar = React.memo(() => {
   });
 
   return (
-    <Navbar className="navbar shadow-sm">
-      <Navbar.Brand
-        as={Link}
-        to="/"
-        style={{ fontSize: "2.25rem", marginLeft: "30px" }}
-      >
+    <Navbar className="navbar shadow-sm" expand="lg">
+      <Navbar.Brand as={Link} to="/" className="ms-0 ms-lg-5">
         <img
           src={RadioArchiveLogo}
           width="auto"
@@ -194,8 +198,11 @@ const NavBar = React.memo(() => {
         <NavbarText id="radiology">Radiology</NavbarText>
         <NavbarText id="archive">Archive</NavbarText>
       </Navbar.Brand>
+
+      <PortalTitle role={role} />
+
       {user ? (
-        <LoggedInDropdown role={role} user={user} signout={signout} />
+        <LoggedInDropdown user={user} signout={signout} />
       ) : (
         <LoggedOutDropdown />
       )}

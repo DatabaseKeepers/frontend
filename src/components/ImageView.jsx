@@ -34,7 +34,6 @@ export default function ImageView() {
   const [newNote, setNewNote] = useState(
     state.image.authors.find((author) => author.uid === user.uid)?.note || ""
   );
-
 //css for role
   const roleColor = (role) => {
     if (role == "Radiologist") {
@@ -268,6 +267,10 @@ export default function ImageView() {
                     <div key={author.uid} style={opinionStyle}>
                       <p>{author.note}</p>
                       <span>By: {author.full_name}</span>
+                      {author.recommendation ?
+                      (<p style={{marginTop: "50px"}}>Recommended Radiologist: {author.recommendation}</p>):
+                      ("")
+                      }
                     </div>
                   );
                 }

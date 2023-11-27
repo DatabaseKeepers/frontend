@@ -26,6 +26,9 @@ function ImageUpload() {
   const [uploading, setUploading] = React.useState(false);
   const { user } = useAuth();
 
+  const[selectedRadiologist, setSelectedRadiologist] = React.useState(null);
+  const [radiologists, setRadiologists] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const handleChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -72,6 +75,7 @@ function ImageUpload() {
                 patient: selectedPatient,
                 notes: notes,
                 url: downloadURL,
+                recommendation: selectedRadiologist,  
               }),
               headers: {
                 "Content-Type": "application/json",
@@ -108,6 +112,33 @@ function ImageUpload() {
       setPatients(data.patients);
     };
     getPatients();
+  }, []);
+  //api call for radiologists
+  React.useEffect(() => {
+    const getRadiologists = () => {
+      fetch(API_URL + "/api/user/radiologists", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setLoading();
+          setRadiologists(data.radiologists);
+          console.log(data);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error("Error fetching data:", err);
+        });
+    };
+    getRadiologists();
   }, []);
 
   React.useEffect(() => {
@@ -201,8 +232,30 @@ function ImageUpload() {
               placeholder="Enter your notes here"
               as="textarea"
               rows={5}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={(e) => {setNotes(e.target.value);} }
             />
+          <Form.Label htmlFor="patientSelect" className="mb-3">
+            Want to recommend a radiologist? Choose a radiologist below.
+          </Form.Label>
+          <Form.Select
+              id="radiologistSelect"
+              className="w-50 ms-4"
+              aria-label="Select a Radiologist to recommend"
+              onChange={(e) => setSelectedRadiologist(e.target.value)}
+              name="recommend_uid"
+              value={selectedRadiologist}
+            >
+              <option>Select a radiologist</option>
+              {radiologists.map((r) => {
+                const fullName =
+                    r.first_name + " " + r.last_name;
+                  return (
+                     <option key={r.uid} value={r.uid}>
+                         {fullName}
+                      </option>
+                        );
+               })}
+            </Form.Select>
           </Form.Group>
 
           <Button

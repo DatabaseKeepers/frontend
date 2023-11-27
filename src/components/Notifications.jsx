@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Badge, Container, Form, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 import { useAuth } from "../contexts/AuthContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Banner from "./Banner";
@@ -105,6 +106,7 @@ function Notifications() {
             </button>
           </div>
         </div>
+        {!notifications && <LoadingSpinner />}
         {notifications.length === 0 ? (
           <div className="text-center">You have no notifications.</div>
         ) : (

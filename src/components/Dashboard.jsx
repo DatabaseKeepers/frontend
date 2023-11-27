@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import Banner from "./Banner.jsx";
 import WebFooter from "./WebFooter.jsx";
-import GreetingCard from "./dashboard components/GreetingCard.jsx";
 import PortalCenter from "./dashboard components/PortalCenter.jsx";
 
 function Dashboard() {
@@ -18,12 +18,12 @@ function Dashboard() {
     flexDirection: "column",
     paddingTop: "2rem",
     paddingBottom: "14rem",
-    background: "#f2f9ff"
+    background: "#f2f9ff",
   };
 
   return (
     <div>
-      <GreetingCard name={user?.displayName || user?.email} />
+      <Banner text={`Welcome, ${user?.displayName || user?.email}!`} />
       <div style={PortalCenterDiv}>
         <PortalCenter role={role} />
       </div>

@@ -95,6 +95,7 @@ function SigninForm() {
               as={Link}
               className="border-0 rounded"
               style={{ backgroundColor: "#5314ba", padding: "0.1rem 1.25rem" }}
+              to="/signup"
             >
               Sign Up
             </Button>
