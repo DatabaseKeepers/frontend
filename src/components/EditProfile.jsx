@@ -16,7 +16,7 @@ import ProfileStaff from "./ProfileStaff";
 import WebFooter from "./WebFooter";
 
 function EditProfile(props) {
-  const { profile_image_url, bio } = props.profile;
+  const { profile_image_url, bio, allow_ratings } = props.profile;
   const { isEditing, setIsEditing } = props;
   const { roleColor } = props;
   const { role, staff } = props;
@@ -35,15 +35,17 @@ function EditProfile(props) {
   const [newEmail, setNewEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
 
+  const [optStatus, setOptStatus] = React.useState(!!allow_ratings); // cast allow_ratings to boolean
   const [password, setPassword] = React.useState("");
 
   const allowBioEdit = role === "Physician" || role === "Radiologist";
   const noProfileChanges =
-    ("" === newBio || bio === newBio) && previewImageURL === profile_image_url;
+    ("" === newBio || bio === newBio) &&
+    previewImageURL === profile_image_url &&
+    optStatus === !!allow_ratings;
 
-  const { optStatus, setOptStatus} = props;
   const handleOptStatusChange = (e) => {
-    setOptStatus(e.target.value === "optIn");
+    setOptStatus(e.target.value !== "optOut");
   };
 
   const handleEmailUpdate = () => {
@@ -139,6 +141,7 @@ function EditProfile(props) {
         body: JSON.stringify({
           profile_image_url,
           bio: newBio,
+          enableRatingSystem: optStatus,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -189,6 +192,7 @@ function EditProfile(props) {
                 body: JSON.stringify({
                   profile_image_url: downloadURL,
                   bio: newBio,
+                  enableRatingSystem: optStatus,
                 }),
                 headers: {
                   "Content-Type": "application/json",
@@ -336,37 +340,39 @@ function EditProfile(props) {
             </Row>
           )}
           {role === "Radiologist" && (
-          <Row className="mt-4">
-            <Col>
-              <Form.Group className="mb-3">
-                <div>
-                <Form.Label style = {{marginRight: '50px'}}>Rating System Preference :</Form.Label>
-                
-                  <label style = {{marginRight: '50px' }}>
-                    <input
-                      type = "radio"
-                      name="optStatus"
-                      value="optIn"
-                      checked={optStatus === true}
-                      onChange={handleOptStatusChange}
-                    />
-                    Opt In
-                  </label>
-                  <label >
-                    <input
-                      type = "radio"
-                      name="optStatus"
-                      value="optOut"
-                      checked={optStatus === false}
-                      onChange={handleOptStatusChange}
-                    />
-                    Opt Out
-                  </label>
-                </div>
-              </Form.Group>
-            </Col>
-          </Row>
-        )}
+            <Row className="mt-4">
+              <Col>
+                <Form.Group className="mb-3">
+                  <div>
+                    <Form.Label style={{ marginRight: "50px" }}>
+                      Rating System Preference :
+                    </Form.Label>
+
+                    <label style={{ marginRight: "50px" }}>
+                      <input
+                        type="radio"
+                        name="optStatus"
+                        value="optIn"
+                        checked={optStatus === true}
+                        onChange={handleOptStatusChange}
+                      />{" "}
+                      Opt In
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="optStatus"
+                        value="optOut"
+                        checked={optStatus === false}
+                        onChange={handleOptStatusChange}
+                      />{" "}
+                      Opt Out
+                    </label>
+                  </div>
+                </Form.Group>
+              </Col>
+            </Row>
+          )}
         </Container>
 
         <Row
