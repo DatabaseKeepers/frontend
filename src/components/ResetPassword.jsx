@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../constants";
 import RadioArchiveLogo from "../assets/RadioArchiveLogo.png";
 import checkmark from "../assets/checkmark.png";
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import "./Form.css";
+
 
 function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -34,7 +36,7 @@ function ResetPassword() {
 
   function LogoHeader() {
     return (
-      <h1>
+      <h1> 
         <Link className="text-decoration-none" to="/">
           <img src={RadioArchiveLogo} alt="Radiology Archive Logo" />
           <span className="titleSpans" id="radiology">
@@ -50,6 +52,8 @@ function ResetPassword() {
 
   function Success() {
     return (
+      <div className="signinWrapper"> 
+      <Container className="signinContainer successContainer"> 
       <div className="container-lg d-flex flex-column justify-content-center align-items-center my-3">
         <LogoHeader />
         <h2 className="fw-bold text-primary my-4">Email Sent!</h2>
@@ -62,44 +66,49 @@ function ResetPassword() {
           Back to Home Page
         </Link>
       </div>
+      </Container>
+    </div>
     );
   }
 
   if (success) {
     return <Success />;
   } else {
+
     return (
-      <div className="resetPasswordWrapper my-3">
-        <div className="resetPasswordContainer">
-          <form className="form" onSubmit={handleSubmit}>
-            <LogoHeader />
-            <div className="form-row" />
-            <div className="form-row">
-              <p>
+      <div className="signinWrapper">
+        <Container className="signinContainer d-flex flex-column">
+          <Row className="justify-content-center">
+            <Col md={8} lg={7}>
+              <Form onSubmit={handleSubmit}>
+               <LogoHeader />
+               <p className="directions"> 
                 Please enter your account’s email address and we’ll send you an
                 email with instructions to reset your password.
               </p>
-            </div>
-            <div className="form-row">
-              <input
+              <Form.Group className="mb-3">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your Email"
                 required
               />
-            </div>
-            <div className="form-row">
-              <button type="submit" className="form-button">
-                Continue
-              </button>
-            </div>
-          </form>
-          <div className="option">
-            <span className="titleSpans">New User?</span>
-            <button onClick={() => navigate("/signup")}>Sign Up</button>
-          </div>
-        </div>
+              </Form.Group>
+              <Button variant="primary" type="submit" className="option w-100 mb-5"> 
+                    Continue
+                    </Button>
+                    <p className="text-center mt-4 option" style={{ fontStyle: 'italic' }}>New User?</p> 
+                    <div className="text-center mt-2 option">
+                    <Button variant="secondary" onClick={() => navigate("/signup")}>
+                    Sign Up
+                  </Button>
+                </div>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }

@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 function WebFooter(){
 
@@ -48,9 +50,9 @@ function WebFooter(){
             
         </div>
         <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                <span style={linkStyle}>Work for Us</span>
+                <Link to="/work" style={linkStyle}>Work with Us</Link>
                 <span style={dividerStyle}>|</span>
-                <span style={linkStyle}>Contact Us</span>
+                <Link to="/contact" style={linkStyle}>Contact Us</Link>
             </div>
             <div style={copyrightStyle}>
             &copy; {new Date().getFullYear()} Radiology Archive. All rights reserved.

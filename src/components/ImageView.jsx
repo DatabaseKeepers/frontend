@@ -1,27 +1,14 @@
 import React, { useState } from "react";
-import { ModalTitle, Spinner } from "react-bootstrap";
+import { Button, Form, Row, Spinner } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../constants.js";
 import { useAuth } from "../contexts/AuthContext";
 import Banner from "./Banner";
 import WebFooter from "./WebFooter";
 import DashboardSection from "./dashboard components/DashboardSection";
-import Modal from 'react-bootstrap/Modal';
 
 export default function ImageView() {
-//This code makes use states for rating popup
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const [rating, setRating] = useState(0);
-
-  const handleStarClick = (selectedRating) => {
-    setRating(selectedRating);
-  }
-////////////////////////////////////////////
-//
   const { role, user } = useAuth();
   const { pathname, state } = useLocation();
   const navigate = useNavigate();
@@ -34,16 +21,60 @@ export default function ImageView() {
   const [newNote, setNewNote] = useState(
     state.image.authors.find((author) => author.uid === user.uid)?.note || ""
   );
-//css for role
+
+  //This code makes use states for rating popup
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [rating, setRating] = useState(0);
+
+  const handleRatingSubmit = async (e) => {
+    e.preventDefault();
+    if (e.target.radiologistSelect.value === "Select a radiologist") {
+      alert("Please select a radiologist.");
+      return;
+    }
+
+    await fetch(`${API_URL}/api/user/rate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + user.accessToken,
+      },
+      body: JSON.stringify({
+        uid: e.target.radiologistSelect.value,
+        rating,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSubmitting(true);
+        if (data.errors && data.errors.length > 0) {
+          alert(data.errors[0].msg);
+        } else {
+          alert(data.msg);
+        }
+      })
+      .catch((error) => {
+        setSubmitting(false);
+        console.log(error);
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  const handleStarClick = (selectedRating) => {
+    setRating(selectedRating);
+  };
+
+  //css for role
   const roleColor = (role) => {
     if (role == "Radiologist") {
       return "#E35D6A";
-    }
-    else if(role === "Patient"){
-      return "#479F76"
-    }
-    else
-    return "#0D6EFD"; // Physician color
+    } else if (role === "Patient") {
+      return "#479F76";
+    } else return "#0D6EFD"; // Physician color
   };
 
   const textInputStyle = {
@@ -93,7 +124,9 @@ export default function ImageView() {
           });
 
           // Check if a matching author was found
-          const matchingAuthor = newAuthors.find((author) => author.uid === user.uid);
+          const matchingAuthor = newAuthors.find(
+            (author) => author.uid === user.uid
+          );
 
           // If no matching author was found, add the new object to the array
           if (!matchingAuthor) {
@@ -133,7 +166,7 @@ export default function ImageView() {
         setSubmitting(false);
       });
   }
-//css for entire page
+  //css for entire page
   const containerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -225,8 +258,7 @@ export default function ImageView() {
     fontSize: "18px",
     fontWeight: "bold",
   };
-////////////////////////////////
-
+  ////////////////////////////////
 
   return (
     <>
@@ -267,10 +299,13 @@ export default function ImageView() {
                     <div key={author.uid} style={opinionStyle}>
                       <p>{author.note}</p>
                       <span>By: {author.full_name}</span>
-                      {author.recommendation ?
-                      (<p style={{marginTop: "50px"}}>Recommended Radiologist: {author.recommendation}</p>):
-                      ("")
-                      }
+                      {author.recommendation ? (
+                        <p style={{ marginTop: "50px" }}>
+                          Recommended Radiologist: {author.recommendation}
+                        </p>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   );
                 }
@@ -353,7 +388,7 @@ export default function ImageView() {
 
       {role === "Patient" && (
         <div>
-          <div style={{marginLeft: "80px"}}>
+          <div style={{ marginLeft: "80px" }}>
             <div style={divider} />
           </div>
           <DashboardSection
@@ -366,51 +401,162 @@ export default function ImageView() {
             buttonDescription={"Get a Second Opinion"}
             buttonLink={"/secondopinion"}
           />
-          <div style={{marginLeft: "80px", marginTop: "50px", marginBottom: "15rem" }}>
-            <h2 style={{marginBottom:" 1.5rem", color:"#0D6EFD" }}>Rate your radiologist!</h2>
-            <p style={{marginTop:" 1rem", marginBottom: "1rem", fontSize: '20px',}}>Leaving a rating helps patients like you have an easier time choosing the radiologist that is right for them! Please give your opinion on your chosen radiologist. </p>
-            <button onClick={handleShow} style={{margin:" 1.25rem", width: '250px',height: '50px',backgroundColor: roleColor(role),color: 'white',borderRadius: '5px',fontSize:'20px'}}>Leave a Review</button>
+          <div
+            style={{
+              marginLeft: "80px",
+              marginTop: "50px",
+              marginBottom: "15rem",
+            }}
+          >
+            <h2 style={{ marginBottom: " 1.5rem", color: "#0D6EFD" }}>
+              Rate your radiologist!
+            </h2>
+            <p
+              style={{
+                marginTop: " 1rem",
+                marginBottom: "1rem",
+                fontSize: "20px",
+              }}
+            >
+              Leaving a rating helps patients like you have an easier time
+              choosing the radiologist that is right for them! Please give your
+              opinion on your chosen radiologist.{" "}
+            </p>
+            <button
+              onClick={handleShow}
+              style={{
+                margin: " 1.25rem",
+                width: "250px",
+                height: "50px",
+                backgroundColor: roleColor(role),
+                color: "white",
+                borderRadius: "5px",
+                fontSize: "20px",
+              }}
+            >
+              Leave a Review
+            </button>
           </div>
 
-        {/*below is the code for the popup that allows the user to submit a rating */}
-        <Modal
-          show={show}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}
-          centered
-          aria-labelledby="contained-modal-title-vcenter"
-        >
-          <Modal.Header style={{border:"none", display:"flex", justifyContent: "center", alignItems: "center"}} closeButton>
-          </Modal.Header>
-            <h2 style={{color:"#0D6EFD",display:"flex", justifyContent: "center", alignItems: "center"}}>Your Rating</h2>
+          {/*below is the code for the popup that allows the user to submit a rating */}
+          <Modal
+            show={show}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+            centered
+            aria-labelledby="contained-modal-title-vcenter"
+          >
+            <Modal.Header
+              style={{
+                border: "none",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              closeButton
+            ></Modal.Header>
+            <h2
+              style={{
+                color: "#0D6EFD",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Your Rating
+            </h2>
 
-          <Modal.Body style={{display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
-            <p style={{fontWeight:"600", margin: "50px "}}>Choose your radiologist below and give your opinion.</p>
-            {/* need to make an api call for selection of radiologist to rate*/}
-            <select name="" id=""> Choose a Radiologist to Rate</select>
-            {/* the conditional down allows user to select stars for their ratings */}
-            <div style={{margin:"3rem"}}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                key={star}
-                onClick={() => handleStarClick(star)}
-                style={{ cursor: 'pointer', fontSize: '24px', color: '#9747FF',}}
+            <Modal.Body
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Form onSubmit={handleRatingSubmit}>
+                <Form.Label style={{ fontWeight: "600", margin: "50px " }}>
+                  Choose your radiologist below and give your opinion.
+                </Form.Label>
+                <Form.Select id="radiologistSelect" className="mx-auto w-75">
+                  Choose a Radiologist to Rate
+                  <option>Select a radiologist</option>
+                  {image.authors &&
+                    image.authors.length > 1 &&
+                    image.authors.map((author) => {
+                      if (author.role === "RADIOLOGIST") {
+                        return (
+                          <option key={author.uid} value={author.uid}>
+                            {author.full_name}
+                          </option>
+                        );
+                      }
+                    })}
+                </Form.Select>
+                {/* the conditional down allows user to select stars for their ratings */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "3rem",
+                  }}
                 >
-                  {star<= rating? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                  </svg>)
-                  : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
-                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
-                  </svg>)}
-                </span>
-              ))}
-            </div>
-            <button style={{backgroundColor:"#0D6EFD", color:"white", borderRadius:"5px", width:"300px", height: "auto", margin: "50px" }} onClick={handleClose}>Submit</button>
-          </Modal.Body>
-        </Modal>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      onClick={() => handleStarClick(star)}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "24px",
+                        color: "#9747FF",
+                      }}
+                    >
+                      {star <= rating ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="50"
+                          height="50"
+                          fill="currentColor"
+                          className="bi bi-star-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="50"
+                          height="50"
+                          fill="currentColor"
+                          className="bi bi-star"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                        </svg>
+                      )}
+                    </span>
+                  ))}
+                </div>
+                <Row className="justify-content-center">
+                  <Button
+                    variant="primary"
+                    style={{
+                      color: "white",
+                      borderRadius: "5px",
+                      width: "300px",
+                      height: "auto",
+                      margin: "50px",
+                    }}
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    Submit
+                  </Button>
+                </Row>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </div>
       )}
       <WebFooter />

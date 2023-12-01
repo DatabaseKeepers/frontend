@@ -92,11 +92,15 @@ function Invoices() {
                       }`}
                     >
                       {invoice.paid ? (
-                        "paid"
+                        <img
+                        src={checkmark} className="checkmark"
+                        alt="checkmark"
+                        style={{width: '50px', height: '50px'}}
+                        />
                       ) : (
                         <div>
                           <p>unpaid</p>
-                          <p>click to pay</p>
+                          <p><i>click to pay</i></p>
                         </div>
                       )}
                     </Col>
