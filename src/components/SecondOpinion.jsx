@@ -184,6 +184,16 @@ function SecondOpinion() {
                   >
                     Go to Image Selection
                   </Button>
+                  <Row>
+                    <Col>
+                    <Button
+                    className = "my-5"
+                    onClick = {() => navigate("/dashboard")}
+                    >
+                      Back to Dashboard
+                    </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </Col>
             </Row>

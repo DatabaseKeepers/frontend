@@ -14,8 +14,10 @@ import { v4 as uuid } from "uuid";
 import { API_URL, MODE } from "../constants.js";
 import { useAuth } from "../contexts/AuthContext";
 import WebFooter from "./WebFooter";
+import { useNavigate } from "react-router-dom";
 
 function ImageUpload() {
+  const navigate = useNavigate();
   const [selectedPatient, setSelectedPatient] = React.useState("");
   const [image, setImage] = React.useState(null);
   const [notes, setNotes] = React.useState(null);
@@ -268,6 +270,16 @@ function ImageUpload() {
           </Button>
 
           {uploading && <ProgressBar now={progress} label={`${progress}%`} />}
+          <Row>
+            <Col>
+              <Button
+              onClick = {() => navigate("/dashboard")}
+              className = "mb-5 ms-4"
+              >
+                Back to Dashboard
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Container>
       <WebFooter />

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Col, Container, ListGroup, Row, Button } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import { API_URL } from "../constants.js";
 import { useAuth } from "../contexts/AuthContext";
 import Banner from "./Banner";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Invoices() {
   const [pageIsFocus, setPageIsFocus] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFocusPage = () => {
@@ -108,6 +110,16 @@ function Invoices() {
             </Container>
           )}
         </ListGroup>
+        <Row>
+          <Col>
+            <Button
+            className = "mb-4"
+            onClick = {() => navigate("/dashboard")}
+            >
+              Back to Dashboard
+            </Button>
+          </Col>
+        </Row>
       </Container>
     </div>
   );

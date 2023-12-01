@@ -252,8 +252,19 @@ function AddPatient() {
                 </Button>
               </ButtonGroup>
             </Row>
+            <Row>
+              <Col>
+                <Button
+                  onClick = {() => navigate("/dashboard")}
+                  className = "my-5 rounded w-100"
+                >
+                  Back to Dashboard
+                </Button>
+              </Col>
+            </Row>
           </Form>
         </Row>
+        
       </Container>
       <WebFooter />
     </>

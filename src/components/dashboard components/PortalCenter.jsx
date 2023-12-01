@@ -70,11 +70,11 @@ export default function PortalCenter({ role }) {
     ],
     Radiologist: [
       {
-        title: "Add More to Your Profile!",
+        title: "View Your List of Patients!",
         description:
-          "If you haven’t already, be sure to add a bio and picture to your profile to let patients know that you are the right radiologist for them!",
-        btnText: "View Profile",
-        btnLink: "/profile",
+          "Access the list of patients assigned to you for radiology services.",
+        btnText: "View Patients",
+        btnLink: "/patients", // Define the URL for viewing patients
       },
       {
         title: "Check Notifications!",
@@ -84,11 +84,11 @@ export default function PortalCenter({ role }) {
         btnLink: "/notifications",
       },
       {
-        title: "View Your List of Patients!",
+        title: "Add More to Your Profile!",
         description:
-          "Access the list of patients assigned to you for radiology services.",
-        btnText: "View Patients",
-        btnLink: "/patients", // Define the URL for viewing patients
+          "If you haven't already, be sure to add a bio and picture to your profile to let patients know that you are the right radiologist for them!",
+        btnText: "View Profile",
+        btnLink: "/profile",
       },
     ],
   };
