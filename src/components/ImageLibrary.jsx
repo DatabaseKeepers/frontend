@@ -46,9 +46,14 @@ export default function ImageLibrary() {
     margin: "10px",
     border: "solid 1px grey",
     width: "1000px",
-    height: "300px",
+    //height: "300px",
+    height: "auto",
     alignItems: 'center',
-    display: "flex"
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    padding: "20px",
+    position: "relative"
   }
   const containerStyle = {
     display: "flex",
@@ -58,12 +63,18 @@ export default function ImageLibrary() {
   }
   const imageStyle = {
     minWidth: "200px",
+    maxWidth: "100%",
     height: "auto",
+    maxHeight: "200px",
     maxWidth: "200px",
-    marginLeft: "50px"
+    marginLeft: "50px",
+    marginBottom: "20px",
+    flexShrink: 0
   }
 
   const buttonStyle = {
+    position: "absolute",
+    bottom: "10px",
     marginLeft: "auto",
     color: "white",
     border: "none",
@@ -76,8 +87,15 @@ export default function ImageLibrary() {
     borderRadius: "5px",
     marginRight: "5rem",
     backgroundColor: '#479F76'
-
   }
+
+  const buttonContainerStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 'auto'
+  };
+
   const introStyle = {
     color: '#0D6EFD',
     margin: '5rem'
@@ -108,8 +126,21 @@ export default function ImageLibrary() {
             <div key={image.uid} style={divStyle}>
 
               <Image src={image.url} style={imageStyle} />
+              <div style = {{position: 'relative' , width: '100%'}}>
+                <div style = {{position: 'absolute' , bottom: '0', width: '100%', padding: '10px'}}>
+                <p style = {{marginBottom: '5px'}}> Physician: {image.uploadedBy_title + " " + image.uploadedBy_first_name + " " + image.uploadedBy_last_name}</p>
+                <p style = {{marginBottom: '0'}}> Upload Date: {new Date(image.createdAt + "UTC").toLocaleString(
+                  [],
+                  { dateStyle: "short", timeStyle: "short"},
+                  "en-US"
+                )}</p>
+              </div>
+              
+              <div style = {buttonContainerStyle}>
               <button style={buttonStyle} onClick={() => { handleClick(image) }}>View</button>
-            </div>
+              </div>
+              </div>
+              </div>
           )
         })}
       </Container>
