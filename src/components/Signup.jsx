@@ -104,7 +104,7 @@ function Signup() {
 
   const errorText = {
     color: "red",
-    marginTop: "5px"
+    margin: "5px 0.75rem 0px 0.75rem",
   };
 
   return (
@@ -140,7 +140,7 @@ function Signup() {
             <Row className="mb-4">
               <Col xs={5} sm={4}>
                 <Form.Group>
-                  <Form.Label htmlFor="role">Role <span style={{color: "red"}}>*</span></Form.Label>
+                  <Form.Label htmlFor="role">Role <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select
                     className="form-select"
                     id="role"
@@ -158,7 +158,7 @@ function Signup() {
               {watchRole === "PHYSICIAN" && (
                 <Col>
                   <Form.Group>
-                    <Form.Label htmlFor="hospital">Hospital <span style={{color: "red"}}>*</span></Form.Label>
+                    <Form.Label htmlFor="hospital">Hospital <span style={{ color: "red" }}>*</span></Form.Label>
                     <Form.Select
                       className="form-select"
                       id="hospital"
@@ -188,7 +188,7 @@ function Signup() {
             <Row className="align-items-end mb-4">
               <Col xs={3} sm={2}>
                 <Form.Group>
-                  <Form.Label htmlFor="Title">Title <span style={{color: "red"}}>*</span></Form.Label>
+                  <Form.Label htmlFor="Title">Title <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select
                     className=""
                     id="Title"
@@ -201,7 +201,7 @@ function Signup() {
                     <option value="Ms.">Ms.</option>
                     <option value="Dr.">Dr.</option>
                   </Form.Select>
-                  {(errors.first_name || errors.last_name) && <p> &nbsp; </p>}
+                  {(errors.first_name || errors.last_name) && <p style={errorText}> &nbsp; </p>}
                 </Form.Group>
               </Col>
               <Col>
@@ -248,7 +248,7 @@ function Signup() {
             <Row className="align-items-end mb-4">
               <Col>
                 <Form.Group>
-                  <Form.Label htmlFor="dob">Date of Birth <span style={{color: "red"}}>*</span></Form.Label>
+                  <Form.Label htmlFor="dob">Date of Birth <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select
                     autoComplete="bday-month"
                     className="form-select"
@@ -275,7 +275,7 @@ function Signup() {
                     <option value="12">December</option>
                   </Form.Select>
                   {errors["bday-month"] && (
-                  <p style={errorText}>{errors["bday-month"].message}</p>
+                    <p style={errorText}>{errors["bday-month"].message}</p>
                   )}
                 </Form.Group>
               </Col>
@@ -291,7 +291,7 @@ function Signup() {
                     })}
                   />
                   {errors["bday-day"] && (
-                  <p style={errorText}>{errors["bday-day"].message}</p>
+                    <p style={errorText}>{errors["bday-day"].message}</p>
                   )}
                 </Form.Group>
               </Col>
@@ -309,7 +309,7 @@ function Signup() {
                     type="string"
                   />
                   {errors["bday-year"] && (
-                  <p style={errorText}>{errors["bday-year"].message}</p>
+                    <p style={errorText}>{errors["bday-year"].message}</p>
                   )}
                 </Form.Group>
               </Col>
@@ -318,7 +318,7 @@ function Signup() {
             <Row className="mb-4">
               <Col>
                 <Form.Group>
-                  <Form.Label htmlFor="email">Email <span style={{color: "red"}}>*</span></Form.Label>
+                  <Form.Label htmlFor="email">Email <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Control
                     as="input"
                     id="email"
@@ -344,7 +344,7 @@ function Signup() {
             <Row className="mb-4">
               <Form.Group>
                 <Form.Label htmlFor="password">
-                  <span>Password </span><span style={{color: "red"}}>*</span>
+                  <span>Password </span><span style={{ color: "red" }}>*</span>
                 </Form.Label>
                 <Form.Control
                   as="input"
