@@ -28,7 +28,7 @@ function ImageUpload() {
   const [uploading, setUploading] = React.useState(false);
   const { user } = useAuth();
 
-  const[selectedRadiologist, setSelectedRadiologist] = React.useState(null);
+  const [selectedRadiologist, setSelectedRadiologist] = React.useState(null);
   const [radiologists, setRadiologists] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const handleChange = (e) => {
@@ -77,7 +77,7 @@ function ImageUpload() {
                 patient: selectedPatient,
                 notes: notes,
                 url: downloadURL,
-                recommendation: selectedRadiologist,  
+                recommendation: selectedRadiologist,
               }),
               headers: {
                 "Content-Type": "application/json",
@@ -133,7 +133,6 @@ function ImageUpload() {
         .then((data) => {
           setLoading();
           setRadiologists(data.radiologists);
-          console.log(data);
         })
         .catch((err) => {
           setLoading(false);
@@ -234,12 +233,14 @@ function ImageUpload() {
               placeholder="Enter your notes here"
               as="textarea"
               rows={5}
-              onChange={(e) => {setNotes(e.target.value);} }
+              onChange={(e) => {
+                setNotes(e.target.value);
+              }}
             />
-          <Form.Label htmlFor="patientSelect" className="mb-3">
-            Want to recommend a radiologist? Choose a radiologist below.
-          </Form.Label>
-          <Form.Select
+            <Form.Label htmlFor="patientSelect" className="mb-3">
+              Want to recommend a radiologist? Choose a radiologist below.
+            </Form.Label>
+            <Form.Select
               id="radiologistSelect"
               className="w-50 ms-4"
               aria-label="Select a Radiologist to recommend"
@@ -249,14 +250,13 @@ function ImageUpload() {
             >
               <option>Select a radiologist</option>
               {radiologists.map((r) => {
-                const fullName =
-                    r.first_name + " " + r.last_name;
-                  return (
-                     <option key={r.uid} value={r.uid}>
-                         {fullName}
-                      </option>
-                        );
-               })}
+                const fullName = r.first_name + " " + r.last_name;
+                return (
+                  <option key={r.uid} value={r.uid}>
+                    {fullName}
+                  </option>
+                );
+              })}
             </Form.Select>
           </Form.Group>
 
@@ -269,12 +269,18 @@ function ImageUpload() {
             Complete Upload
           </Button>
 
-          {uploading && <ProgressBar now={progress} label={`${progress}%`} />}
+          {uploading && (
+            <ProgressBar
+              className="mb-5"
+              now={progress}
+              label={`${progress}%`}
+            />
+          )}
           <Row>
             <Col>
               <Button
-              onClick = {() => navigate("/dashboard")}
-              className = "mb-5 ms-4"
+                onClick={() => navigate("/dashboard")}
+                className="mb-5 ms-4"
               >
                 Back to Dashboard
               </Button>
