@@ -4,8 +4,16 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import React from "react";
-import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import default_profile_picture from "../assets/default_profile_picture.png";
@@ -22,6 +30,10 @@ function EditProfile(props) {
   const { role, staff } = props;
   const { setData } = props;
   const { signin, user } = useAuth();
+  const [showEmailModal, setShowEmailModal] = useState(false); // State to manage modal visibility
+
+  const handleShowEmailModal = () => setShowEmailModal(true);
+  const handleCloseEmailModal = () => setShowEmailModal(false);
 
   const [newBio, setNewBio] = React.useState(bio ?? "");
   const [profileImage, setProfileImage] = React.useState();
@@ -91,6 +103,8 @@ function EditProfile(props) {
           setShowEmailUpdate(false);
           setNewEmail(""); // Optionally reset the email state
           setPassword(""); // Optionally reset the password state
+
+          handleCloseEmailModal();
         } else {
           setEmailError(data.errors[0].msg || "Failed to update email.");
           setPassword("");
@@ -216,7 +230,57 @@ function EditProfile(props) {
       );
     }
   };
-
+  const emailUpdateForm = (
+    <Container className="py-5">
+      <h3 className="mb-5" style={{ color: "#0d6efd" }}>
+        Change Email
+      </h3>
+      <p>
+        To update your email, please provide your new email and current password
+      </p>
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="newEmail">New Email</Form.Label>
+          <Form.Control
+            id="newEmail"
+            name="newEmail"
+            type="email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+            placeholder="Enter your new email"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="password">Password</Form.Label>
+          <Form.Control
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password to confirm"
+          />
+          {emailError && <div className="text-danger">{emailError}</div>}
+        </Form.Group>
+        <Row className="pt-3 justify-content-center">
+          <Col xs={3}>
+            <Button
+              className="w-100"
+              variant="secondary"
+              onClick={handleCloseEmailModal} // Close the modal on cancel
+            >
+              Cancel
+            </Button>
+          </Col>
+          <Col xs={3}>
+            <Button className="w-100" onClick={handleEmailUpdate}>
+              Confirm
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Container>
+  );
   return (
     <>
       <Banner text="Profile Information" />
@@ -266,6 +330,22 @@ function EditProfile(props) {
                 </Col>
                 <Col className="fw-semibold">{props.profile.dob}</Col>
                 <Col className="text-end">
+                  <div className="rounded-pill">
+                    {(role === "Patient" || role === "Physician") && (
+                      <Button
+                        onClick={handleShowEmailModal}
+                        style={{
+                          border: "#838383",
+                          backgroundColor: "#838383",
+                          color: "#fff",
+                          marginBottom: "10px",
+                          borderRadius: "20px",
+                        }}
+                      >
+                        Update Email
+                      </Button>
+                    )}
+                  </div>
                   <div className="rounded-pill">
                     <input
                       id="fileInput"
@@ -401,61 +481,16 @@ function EditProfile(props) {
           </Col>
         </Row>
 
-        {isEditing && (role === "Patient" || role === "Physician") && (
-          <Row>
-            <Col xs={12}>
-              <Button onClick={() => setShowEmailUpdate(true)}>
-                Update Email
-              </Button>
-            </Col>
-          </Row>
-        )}
-
-        {showEmailUpdate && (
-          <Row>
-            <Col xs={12}>
-              <h2 className="my-4" style={{ color: "#0d6efd" }}>
-                Change Email
-              </h2>
-              <p className="mb-4">
-                To update your email, please provide your new email and current
-                password.
-              </p>
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Label>New Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder="Enter your new email"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password to confirm"
-                  />
-
-                  {emailError && (
-                    <div className="text-danger">{emailError}</div>
-                  )}
-                </Form.Group>
-                <Button onClick={handleEmailUpdate}>Confirm</Button>
-                <Button
-                  className="ms-4"
-                  variant="secondary"
-                  onClick={() => setShowEmailUpdate(false)}
-                >
-                  Cancel
-                </Button>
-              </Form>
-            </Col>
-          </Row>
-        )}
+        <Modal
+          show={showEmailModal}
+          onHide={handleCloseEmailModal}
+          backdrop="static"
+          size="md"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Body>{emailUpdateForm}</Modal.Body>
+        </Modal>
       </Container>
       <WebFooter />
     </>

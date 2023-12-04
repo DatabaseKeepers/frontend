@@ -56,7 +56,7 @@ export default function PortalCenter({ role }) {
       {
         title: "View Your Invoices.",
         description:
-          "",
+          "Have access to all your purchase orders and pay them quick and easy.",
         btnText: "Invoice History",
         btnLink: "/invoices",
       },
