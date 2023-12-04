@@ -104,6 +104,7 @@ function Signup() {
 
   const errorText = {
     color: "red",
+    marginTop: "5px"
   };
 
   return (
@@ -139,7 +140,7 @@ function Signup() {
             <Row className="mb-4">
               <Col xs={5} sm={4}>
                 <Form.Group>
-                  <Form.Label htmlFor="role">Role</Form.Label>
+                  <Form.Label htmlFor="role">Role <span style={{color: "red"}}>*</span></Form.Label>
                   <Form.Select
                     className="form-select"
                     id="role"
@@ -157,7 +158,7 @@ function Signup() {
               {watchRole === "PHYSICIAN" && (
                 <Col>
                   <Form.Group>
-                    <Form.Label htmlFor="hospital">Hospital</Form.Label>
+                    <Form.Label htmlFor="hospital">Hospital <span style={{color: "red"}}>*</span></Form.Label>
                     <Form.Select
                       className="form-select"
                       id="hospital"
@@ -187,7 +188,7 @@ function Signup() {
             <Row className="align-items-end mb-4">
               <Col xs={3} sm={2}>
                 <Form.Group>
-                  <Form.Label htmlFor="Title">Title</Form.Label>
+                  <Form.Label htmlFor="Title">Title <span style={{color: "red"}}>*</span></Form.Label>
                   <Form.Select
                     className=""
                     id="Title"
@@ -200,10 +201,11 @@ function Signup() {
                     <option value="Ms.">Ms.</option>
                     <option value="Dr.">Dr.</option>
                   </Form.Select>
+                  {(errors.first_name || errors.last_name) && <p> &nbsp; </p>}
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group>
+                <Form.Group >
                   <Form.Label htmlFor="first_name"></Form.Label>
                   <Form.Control
                     as="input"
@@ -217,6 +219,9 @@ function Signup() {
                     placeholder="First Name"
                     aria-label="First Name"
                   />
+                  {errors.first_name && (
+                    <p style={errorText}>{errors.first_name.message}</p>
+                  )}
                 </Form.Group>
               </Col>
               <Col>
@@ -233,9 +238,6 @@ function Signup() {
                     placeholder="Last Name"
                     aria-label="Last Name"
                   />
-                  {errors.first_name && (
-                    <p style={errorText}>{errors.first_name.message}</p>
-                  )}
                   {errors.last_name && (
                     <p style={errorText}>{errors.last_name.message}</p>
                   )}
@@ -246,7 +248,7 @@ function Signup() {
             <Row className="align-items-end mb-4">
               <Col>
                 <Form.Group>
-                  <Form.Label htmlFor="dob">Date of Birth</Form.Label>
+                  <Form.Label htmlFor="dob">Date of Birth <span style={{color: "red"}}>*</span></Form.Label>
                   <Form.Select
                     autoComplete="bday-month"
                     className="form-select"
@@ -272,6 +274,9 @@ function Signup() {
                     <option value="11">November</option>
                     <option value="12">December</option>
                   </Form.Select>
+                  {errors["bday-month"] && (
+                  <p style={errorText}>{errors["bday-month"].message}</p>
+                  )}
                 </Form.Group>
               </Col>
               <Col>
@@ -285,6 +290,9 @@ function Signup() {
                       required: "Day is required",
                     })}
                   />
+                  {errors["bday-day"] && (
+                  <p style={errorText}>{errors["bday-day"].message}</p>
+                  )}
                 </Form.Group>
               </Col>
               <Col>
@@ -300,23 +308,17 @@ function Signup() {
                     placeholder="Year"
                     type="string"
                   />
+                  {errors["bday-year"] && (
+                  <p style={errorText}>{errors["bday-year"].message}</p>
+                  )}
                 </Form.Group>
               </Col>
-              {errors["bday-month"] && (
-                <p style={errorText}>{errors["bday-month"].message}</p>
-              )}
-              {errors["bday-day"] && (
-                <p style={errorText}>{errors["bday-day"].message}</p>
-              )}
-              {errors["bday-year"] && (
-                <p style={errorText}>{errors["bday-year"].message}</p>
-              )}
             </Row>
 
             <Row className="mb-4">
               <Col>
                 <Form.Group>
-                  <Form.Label htmlFor="email">Email</Form.Label>
+                  <Form.Label htmlFor="email">Email <span style={{color: "red"}}>*</span></Form.Label>
                   <Form.Control
                     as="input"
                     id="email"
@@ -342,7 +344,7 @@ function Signup() {
             <Row className="mb-4">
               <Form.Group>
                 <Form.Label htmlFor="password">
-                  <span>Password</span>
+                  <span>Password </span><span style={{color: "red"}}>*</span>
                 </Form.Label>
                 <Form.Control
                   as="input"
