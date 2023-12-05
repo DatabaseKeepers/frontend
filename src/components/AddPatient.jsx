@@ -96,7 +96,7 @@ function AddPatient() {
       >
         <Row className="">
           <Form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-            <Row>
+            <Row className="mb-2">
               <Col>
                 <Form.Group>
                   <Form.Label htmlFor="first_name">Patient's Name</Form.Label>
@@ -240,31 +240,32 @@ function AddPatient() {
               {errors.root ? <p>{errors.root.serverError.message}</p> : null}
             </Row>
 
-            <Row>
-              <ButtonGroup>
-                <Button
-                  aria-label="Add New Patient"
-                  className="my-5 rounded"
-                  title="Add New Patient"
-                  type="submit"
-                >
-                  Add New Patient
-                </Button>
-              </ButtonGroup>
-            </Row>
-            <Row>
-              <Col>
-                <Button
-                  onClick = {() => navigate("/dashboard")}
-                  className = "my-5 rounded w-100"
-                >
-                  Back to Dashboard
-                </Button>
+            <Row className="justify-content-center">
+              <Col xs={6} sm={3}>
+                <ButtonGroup>
+                  <Button
+                    aria-label="Add New Patient"
+                    className="my-5 rounded"
+                    title="Add New Patient"
+                    type="submit"
+                  >
+                    Add New Patient
+                  </Button>
+                </ButtonGroup>
               </Col>
             </Row>
           </Form>
+          <Row>
+            <Col xs={6} sm={3}>
+              <Button
+                onClick={() => navigate("/dashboard")}
+                className="my-5 rounded w-100"
+              >
+                Back to Dashboard
+              </Button>
+            </Col>
+          </Row>
         </Row>
-        
       </Container>
       <WebFooter />
     </>
