@@ -85,9 +85,12 @@ function AddPatient() {
     <>
       <Banner text="Patient Center" />
       <div style={divStyle}>
-        <h2 style={headerStyle}>Add Your New Patient</h2>
+        <h2 style={headerStyle}>
+          Add an existing patient or create an account
+        </h2>
         <p style={descriptionStyle}>
-          Please enter the necessary information for your patient below.
+          Enter the patient's email to add them to your patient list, or enter
+          the necessary information for your patient's new account below.
         </p>
       </div>
       <Container
